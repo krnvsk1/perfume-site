@@ -11,7 +11,11 @@
 | `store.js` | Работа с данными (демо или Supabase) |
 | `config.js` | Настройки подключения к Supabase |
 | `styles.css` | Оформление |
+| `data/price.txt` | Прайс распива, перенесённый с Taplink: бренд, аромат, цена за мл, где потестить |
+| `data/catalog.js` | Каталог для демо-режима, собирается из прайса |
+| `tools/build_catalog.py` | Пересобирает `catalog.js` и `seed.sql` после правки прайса |
 | `supabase/schema.sql` | Таблицы, правила доступа и функция заказа |
+| `supabase/seed.sql` | Загрузка прайса в базу |
 | `supabase/functions/notify/index.ts` | Отправка заявок в Telegram |
 
 ## Запуск локально
@@ -25,10 +29,14 @@ python3 -m http.server 8000
 
 Открой http://localhost:8000 (витрина) и http://localhost:8000/admin.html (админка).
 
+## Прайс и контакты
+
+Контакты, адреса и часы работы лежат в `config.js` в разделе `SHOP`. Прайс лежит в `data/price.txt`: одна строка на аромат, поля через `|`. После правки выполни `python3 tools/build_catalog.py`. Когда база подключена, ароматы удобнее менять в админке: там можно поменять цену, указать остаток, скрыть аромат с витрины и загрузить фото.
+
 ## Подключение настоящей базы
 
 1. Зарегистрируйся на https://supabase.com и создай проект.
-2. SQL Editor → вставь содержимое `supabase/schema.sql` → Run.
+2. SQL Editor → вставь содержимое `supabase/schema.sql` → Run. Затем так же выполни `supabase/seed.sql`, чтобы загрузить прайс.
 3. Authentication → Users → Add user: создай себе почту и пароль для входа в админку.
 4. Authentication → Sign In / Providers → выключи «Allow new users to sign up», чтобы никто другой не завёл аккаунт.
 5. Project Settings → API: скопируй Project URL и anon public key в `config.js`.

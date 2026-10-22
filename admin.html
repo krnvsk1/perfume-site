@@ -7,6 +7,14 @@
 <title>Управление</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="styles.css">
+<style>
+.item{grid-template-columns:44px minmax(0,1fr) 90px 90px auto;}
+.item .ctl{display:flex;gap:6px;flex-wrap:wrap;justify-content:end}
+.item.is-hidden b{opacity:.5}
+@media (max-width:640px){.item{grid-template-columns:44px minmax(0,1fr)}.item>label,.item .ctl{grid-column:2}}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -35,22 +43,24 @@
       <form class="panel" id="addForm">
         <h2>Новый аромат</h2>
         <div class="row">
-          <label>Название<input id="f-name" required placeholder="Например, Ночной сад"></label>
-          <label>Бренд<input id="f-house" placeholder="Maison …"></label>
+          <label>Бренд<input id="f-house" required placeholder="Mancera"></label>
+          <label>Название<input id="f-name" required placeholder="Red Tobacco"></label>
         </div>
-        <label>Описание и ноты<textarea id="f-desc" rows="3" placeholder="Верх: бергамот. Сердце: ирис. База: мускус."></textarea></label>
+        <label>Описание или пометка<textarea id="f-desc" rows="2" placeholder="Ноты, «новинка 2026», «похож на …»"></textarea></label>
         <div class="row">
           <label>Цена за 1 мл<input id="f-ppm" type="number" min="1" step="1" required></label>
-          <label>Цена флакона<input id="f-bp" type="number" min="1" step="1"></label>
+          <label>Минимум, мл<input id="f-min" type="number" min="1" step="1" value="2" required></label>
         </div>
         <div class="row">
-          <label>Объём флакона, мл<input id="f-vol" type="number" min="1" step="1" required value="100"></label>
-          <label>Сейчас в наличии, мл<input id="f-left" type="number" min="0" step="1" required value="100"></label>
+          <label>Где потестить
+            <select id="f-loc"><option value="">Не указано</option><option value="Н">Народная</option><option value="П">Жлобы</option><option value="НП">Оба адреса</option></select></label>
+          <label>Остаток, мл<input id="f-left" type="number" min="0" step="1" placeholder="не вести учёт"></label>
         </div>
         <div class="row">
-          <label>Фото<input id="f-photo" type="file" accept="image/*"></label>
-          <label>Цвет флакона без фото<input id="f-color" type="color" value="#6E3F84" style="height:44px;padding:4px"></label>
+          <label>Цена флакона<input id="f-bp" type="number" min="1" step="1" placeholder="только распив"></label>
+          <label>Объём флакона, мл<input id="f-vol" type="number" min="1" step="1"></label>
         </div>
+        <label>Фото<input id="f-photo" type="file" accept="image/*"></label>
         <p class="err" id="f-err"></p>
         <button class="btn" type="submit" id="f-submit">Добавить на витрину</button>
       </form>
@@ -61,8 +71,9 @@
       </section>
 
       <section class="panel wide">
-        <h2>Ароматы на витрине</h2>
-        <p class="notes">Остаток уменьшается сам при каждой заявке. Здесь его можно поправить вручную, например после пополнения.</p>
+        <h2>Ароматы</h2>
+        <p class="notes">Пустой остаток значит, что учёт не ведётся. Если указать остаток, он будет уменьшаться сам при каждой заявке.</p>
+        <input id="iq" type="search" placeholder="Найти аромат">
         <div id="items"></div>
       </section>
     </div>
@@ -71,6 +82,7 @@
 <div class="toast" id="toast" hidden></div>
 
 <script src="config.js"></script>
+<script src="data/catalog.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="store.js"></script>
 <script>
@@ -78,6 +90,8 @@ const $ = id => document.getElementById(id);
 let tt; function toast(t) { $("toast").textContent = t; $("toast").hidden = false; clearTimeout(tt); tt = setTimeout(() => $("toast").hidden = true, 2800); }
 $("demoBadge").hidden = Store.live;
 $("logout").hidden = !Store.live;
+let all = [];
+const num = v => v === "" || v == null ? null : Math.max(0, Math.floor(+v));
 
 async function boot() {
   const s = await Store.session();
@@ -92,15 +106,30 @@ $("loginView").addEventListener("submit", async e => {
 });
 $("logout").onclick = async () => { await Store.signOut(); boot(); };
 
+function drawItems() {
+  const q = $("iq").value.trim().toLowerCase();
+  const list = all.filter(p => !q || (p.house + " " + p.name).toLowerCase().includes(q)).slice(0, 60);
+  $("items").innerHTML = list.length ? list.map(p => `
+    <div class="item ${p.hidden ? "is-hidden" : ""}" data-id="${esc(p.id)}">
+      ${p.photo_url ? `<img class="thumb" src="${esc(p.photo_url)}" alt="">` : `<span class="thumb" style="background:${esc(p.color)}"></span>`}
+      <div><b>${esc(p.house)} ${esc(p.name)}</b><small>${p.location ? esc(p.location) + " · " : ""}${p.hidden ? "скрыт с витрины" : "на витрине"}</small></div>
+      <label>₽ за мл<input type="number" min="1" step="1" value="${p.price_per_ml}" data-ppm></label>
+      <label>Остаток<input type="number" min="0" step="1" value="${p.ml_left ?? ""}" placeholder="—" data-left></label>
+      <div class="ctl">
+        <span class="btn ghost small filebtn">Фото<input type="file" accept="image/*" data-photo></span>
+        <button class="btn small" data-save>Сохранить</button>
+        <button class="btn ghost small" data-hide>${p.hidden ? "Показать" : "Скрыть"}</button>
+        <button class="btn ghost small" data-del>Удалить</button>
+      </div>
+    </div>`).join("") + (all.length > list.length && !q ? `<p class="notes">Показаны первые 60 из ${all.length}. Найди нужный аромат через поиск.</p>` : "")
+    : `<p class="notes">Ничего не нашлось.</p>`;
+}
+$("iq").addEventListener("input", drawItems);
+
 async function refresh() {
   try {
-    const [items, orders] = await Promise.all([Store.list(), Store.orders()]);
-    $("items").innerHTML = items.length ? items.map(p => `
-      <div class="item" data-id="${esc(p.id)}">
-        <div><b>${esc(p.name)}</b><small>${esc(p.house)} · ${fmtMoney(p.price_per_ml)}/мл · флакон ${p.bottle_volume} мл</small></div>
-        <label>В наличии, мл<input type="number" min="0" step="1" value="${p.ml_left}" data-left></label>
-        <div class="row" style="flex-wrap:nowrap"><button class="btn small" data-save>Сохранить</button><button class="btn ghost small" data-del>Удалить</button></div>
-      </div>`).join("") : `<p class="notes">Пока пусто. Добавь первый аромат в форме выше.</p>`;
+    const [items, orders] = await Promise.all([Store.list({ all: true }), Store.orders()]);
+    all = items; drawItems();
     $("orders").innerHTML = orders.length ? orders.map(o => `
       <div class="order"><div class="t">${new Date(o.created_at).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</div>
       <b>${esc(o.perfume_name)}</b> · ${o.full_bottle ? "флакон" : o.ml + " мл"} · ${fmtMoney(o.total)}<br>${esc(o.customer_name)}, ${esc(o.phone)}</div>`).join("")
@@ -108,29 +137,40 @@ async function refresh() {
   } catch (e) { toast("Ошибка загрузки: " + e.message); }
 }
 
+$("items").addEventListener("change", async e => {
+  if (!e.target.matches("[data-photo]") || !e.target.files[0]) return;
+  const id = e.target.closest(".item").dataset.id;
+  try { await Store.update(id, {}, e.target.files[0]); toast("Фото загружено"); refresh(); }
+  catch (err) { toast("Не получилось загрузить фото: " + err.message); }
+});
 $("items").addEventListener("click", async e => {
   const row = e.target.closest(".item"); if (!row) return;
-  const id = row.dataset.id;
-  if (e.target.matches("[data-save]")) {
-    await Store.update(id, { ml_left: Math.max(0, Math.floor(+row.querySelector("[data-left]").value || 0)) });
-    toast("Остаток обновлён"); refresh();
-  }
-  if (e.target.matches("[data-del]")) {
-    if (e.target.dataset.confirm) { await Store.remove(id); toast("Аромат удалён"); refresh(); }
-    else { e.target.dataset.confirm = "1"; e.target.textContent = "Точно удалить?"; }
-  }
+  const id = row.dataset.id, p = all.find(x => String(x.id) === id);
+  try {
+    if (e.target.matches("[data-save]")) {
+      await Store.update(id, { price_per_ml: num(row.querySelector("[data-ppm]").value) || p.price_per_ml, ml_left: num(row.querySelector("[data-left]").value) });
+      toast("Сохранено"); refresh();
+    }
+    if (e.target.matches("[data-hide]")) { await Store.update(id, { hidden: !p.hidden }); toast(p.hidden ? "Аромат снова на витрине" : "Аромат скрыт с витрины"); refresh(); }
+    if (e.target.matches("[data-del]")) {
+      if (e.target.dataset.confirm) { await Store.remove(id); toast("Аромат удалён"); refresh(); }
+      else { e.target.dataset.confirm = "1"; e.target.textContent = "Точно удалить?"; }
+    }
+  } catch (err) { toast("Ошибка: " + err.message); }
 });
 
 $("addForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const vol = Math.floor(+$("f-vol").value);
+  const bp = num($("f-bp").value), vol = num($("f-vol").value);
+  if (bp && !vol) { $("f-err").textContent = "Укажи объём флакона, раз есть его цена."; return; }
+  const h = Math.floor(Math.random() * 360);
   const item = {
-    name: $("f-name").value.trim(), house: $("f-house").value.trim(), description: $("f-desc").value.trim(),
-    price_per_ml: +$("f-ppm").value, bottle_price: +$("f-bp").value || null,
-    bottle_volume: vol, ml_left: Math.min(Math.floor(+$("f-left").value), vol), color: $("f-color").value
+    house: $("f-house").value.trim(), name: $("f-name").value.trim(), description: $("f-desc").value.trim() || null,
+    price_per_ml: num($("f-ppm").value), min_ml: num($("f-min").value) || 2, location: $("f-loc").value || null,
+    ml_left: num($("f-left").value), bottle_price: bp, bottle_volume: vol, color: `hsl(${h} 38% 52%)`, hidden: false
   };
   $("f-submit").disabled = true; $("f-err").textContent = "";
-  try { await Store.add(item, $("f-photo").files[0]); e.target.reset(); $("f-vol").value = 100; $("f-left").value = 100; toast("Аромат добавлен на витрину"); refresh(); }
+  try { await Store.add(item, $("f-photo").files[0]); e.target.reset(); $("f-min").value = 2; toast("Аромат добавлен на витрину"); refresh(); }
   catch (err) { $("f-err").textContent = "Не получилось сохранить: " + err.message; }
   finally { $("f-submit").disabled = false; }
 });

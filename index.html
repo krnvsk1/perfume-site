@@ -3,36 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Распив духов</title>
-<meta name="description" content="Оригинальные ароматы на распив от 1 мл или целым флаконом.">
+<title>Парфюмерная Комната</title>
+<meta name="description" content="Распив оригинальной парфюмерии в Краснодаре: любой аромат от 2 мл, атомайзер в подарок.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div>
-      <div class="badge" id="demoBadge" hidden>Демо-режим</div>
-      <h1 id="shopName">Распив духов</h1>
-      <p class="sub">Оригинальные ароматы на распив от 1 мл или целым флаконом. Уровень во флаконе показывает, сколько осталось.</p>
-    </div>
+  <header class="hero">
+    <div class="badge" id="demoBadge" hidden>Демо-режим</div>
+    <h1 id="shopName">Парфюмерная Комната</h1>
+    <p class="sub" id="tagline"></p>
+    <ul class="facts" id="facts"></ul>
   </header>
+
+  <div class="toolbar" role="search">
+    <label class="search"><span class="sr">Поиск</span>
+      <input id="q" type="search" placeholder="Бренд или аромат, например Mancera" autocomplete="off">
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="Фильтр">
+      <button type="button" data-f="all" aria-pressed="true">Все</button>
+      <button type="button" data-f="Н" aria-pressed="false">На Народной</button>
+      <button type="button" data-f="П" aria-pressed="false">На Жлобы</button>
+      <button type="button" data-f="new" aria-pressed="false">Новинки</button>
+    </div>
+    <label class="sort"><span class="sr">Сортировка</span>
+      <select id="sort">
+        <option value="house">По бренду</option>
+        <option value="cheap">Сначала дешевле</option>
+        <option value="dear">Сначала дороже</option>
+      </select>
+    </label>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+
   <main><div class="grid" id="grid"><p class="empty">Загружаю ароматы…</p></div></main>
+
+  <section class="contacts" id="contacts" aria-labelledby="c-title">
+    <h2 id="c-title">Где потестить и забрать</h2>
+    <div class="places" id="places"></div>
+    <div class="reach">
+      <div><div class="house">Телефон для записи на подбор</div>
+        <div class="phone"><span id="phone"></span><button class="btn ghost small" id="copyPhone" type="button">Скопировать</button></div></div>
+      <div class="links" id="links"></div>
+    </div>
+  </section>
+
   <footer id="demoFooter" hidden>
-    <span>Демо: данные хранятся только в этом браузере.</span>
+    <span>Демо: заказы и остатки хранятся только в этом браузере.</span>
     <button class="btn ghost small" id="reset" type="button">Сбросить демо</button>
   </footer>
 </div>
 
 <div class="veil" id="veil" hidden>
   <form class="sheet" id="orderForm" novalidate>
-    <div><div class="house" id="o-house"></div><h2 id="o-name"></h2></div>
-    <div class="seg">
+    <div><div class="house" id="o-house"></div><h2 id="o-name"></h2><div id="o-loc" class="locs"></div></div>
+    <div class="seg" id="segWrap">
       <button type="button" id="m-ml" aria-pressed="true">На распив</button>
       <button type="button" id="m-full" aria-pressed="false">Полный флакон</button>
     </div>
-    <label id="mlWrap">Сколько миллилитров<input id="o-ml" type="number" min="1" step="1" value="5" inputmode="numeric"></label>
+    <div id="mlWrap">
+      <label for="o-ml">Сколько миллилитров</label>
+      <div class="qty">
+        <div class="presets" id="presets"></div>
+        <input id="o-ml" type="number" min="2" step="1" value="5" inputmode="numeric">
+      </div>
+    </div>
     <div class="total"><span id="o-hint" class="notes"></span><b id="o-total"></b></div>
     <label>Имя<input id="o-cust" autocomplete="name"></label>
     <label>Телефон<input id="o-phone" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></label>
@@ -46,41 +83,105 @@
 <div class="toast" id="toast" hidden></div>
 
 <script src="config.js"></script>
+<script src="data/catalog.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="store.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-let items = [], cur = null, full = false;
-if (APP_CONFIG.SHOP_NAME) { $("shopName").textContent = APP_CONFIG.SHOP_NAME; document.title = APP_CONFIG.SHOP_NAME; }
+const SHOP = APP_CONFIG.SHOP || {};
+const LOCS = SHOP.locations || {};
+let items = [], cur = null, full = false, filter = "all";
+
+// ---- шапка и контакты из config.js
+$("shopName").textContent = SHOP.name || "Распив духов";
+document.title = SHOP.name || document.title;
+$("tagline").textContent = SHOP.tagline || "";
+$("facts").innerHTML = (SHOP.notes || []).map(n => `<li>${esc(n)}</li>`).join("");
+$("places").innerHTML = Object.entries(LOCS).map(([k, l]) => `
+  <article class="place"><span class="pin">${esc(k)}</span>
+    <div><h3>${esc(l.title)}</h3><p>${esc(l.address)}</p><p class="notes">${esc(l.hours)}</p>
+    ${l.map ? `<a href="${esc(l.map)}" target="_blank" rel="noopener">Открыть на карте</a>` : ""}</div></article>`).join("");
+$("phone").textContent = SHOP.phone || "";
+const LINK_NAMES = { whatsapp: "WhatsApp", telegram: "Telegram", max: "MAX", vk: "ВКонтакте" };
+$("links").innerHTML = Object.entries(SHOP.links || {}).map(([k, u]) =>
+  `<a class="btn ghost small" href="${esc(u)}" target="_blank" rel="noopener">${LINK_NAMES[k] || k}</a>`).join("");
+$("copyPhone").onclick = async () => {
+  try { await navigator.clipboard.writeText(SHOP.phone); toast("Номер скопирован"); }
+  catch (e) { getSelection().selectAllChildren($("phone")); }
+};
 $("demoBadge").hidden = $("demoFooter").hidden = Store.live;
 
-function bottle(p) {
-  const pct = Math.max(0, Math.min(100, p.ml_left / p.bottle_volume * 100));
-  return p.photo_url ? `<img src="${esc(p.photo_url)}" alt="${esc(p.name)}" loading="lazy">`
-    : `<div class="bottle"><div class="cap"></div><div class="neck"></div><div class="flask"><div class="liquid" style="height:${pct}%;background:${esc(p.color || "#6E3F84")}"></div></div></div>`;
-}
-async function render() {
-  try { items = await Store.list(); } catch (e) { $("grid").innerHTML = `<p class="empty">Не удалось загрузить каталог: ${esc(e.message)}</p>`; return; }
-  if (!items.length) { $("grid").innerHTML = `<p class="empty">Скоро здесь появятся ароматы.</p>`; return; }
-  $("grid").innerHTML = items.map(p => {
-    const pct = Math.max(0, Math.min(100, p.ml_left / p.bottle_volume * 100)), out = p.ml_left <= 0;
-    return `<article class="card">
-      <div class="stage">${bottle(p)}</div>
-      <div><div class="house">${esc(p.house)}</div><h3 class="name">${esc(p.name)}</h3></div>
-      <p class="notes">${esc(p.description)}</p>
-      <div><div class="left ${out ? "sold" : ""}">${out ? "Закончился" : `Осталось ${p.ml_left} из ${p.bottle_volume} мл`}</div><div class="gauge"><i style="width:${pct}%"></i></div></div>
-      <div class="prices"><div><b>${fmtMoney(p.price_per_ml)}</b><span>за 1 мл</span></div><div style="text-align:right"><b>${p.bottle_price ? fmtMoney(p.bottle_price) : "—"}</b><span>флакон ${p.bottle_volume} мл</span></div></div>
-      <button class="btn" data-buy="${esc(p.id)}" ${out ? "disabled" : ""}>${out ? "Нет в наличии" : "Заказать"}</button>
-    </article>`;
-  }).join("");
-}
+// ---- каталог
+const locBadges = loc => [...(loc || "")].filter(k => LOCS[k]).map(k =>
+  `<span class="loc" title="${esc(LOCS[k].address)}">${k === "Н" ? "Народная" : "Жлобы"}</span>`).join("");
+const isNew = p => /новинка/i.test(p.description || "");
 
+function bottle(p) {
+  if (p.photo_url) return `<img src="${esc(p.photo_url)}" alt="${esc(p.house + " " + p.name)}" loading="lazy">`;
+  const pct = p.ml_left != null && p.bottle_volume ? Math.max(0, Math.min(100, p.ml_left / p.bottle_volume * 100)) : 70;
+  return `<div class="bottle" aria-hidden="true"><div class="cap"></div><div class="neck"></div><div class="flask"><div class="liquid" style="height:${pct}%;background:${esc(p.color || "#6E3F84")}"></div></div></div>`;
+}
+function stock(p) {
+  if (p.ml_left == null) return "";
+  if (p.ml_left <= 0) return `<div class="left sold">Закончился</div>`;
+  const pct = p.bottle_volume ? Math.min(100, p.ml_left / p.bottle_volume * 100) : 100;
+  return `<div><div class="left">Осталось ${p.ml_left}${p.bottle_volume ? " из " + p.bottle_volume : ""} мл</div><div class="gauge"><i style="width:${pct}%"></i></div></div>`;
+}
+function card(p) {
+  const out = p.ml_left != null && p.ml_left < (p.min_ml || 1);
+  const min = p.min_ml || 2;
+  return `<article class="card">
+    <div class="stage">${bottle(p)}${isNew(p) ? `<span class="tag">Новинка</span>` : ""}</div>
+    <div><div class="house">${esc(p.house)}</div><h3 class="name">${esc(p.name)}</h3></div>
+    ${p.description && !isNew(p) ? `<p class="notes">${esc(p.description)}</p>` : `<p class="notes"></p>`}
+    ${stock(p)}
+    <div class="locs">${locBadges(p.location)}</div>
+    <div class="prices"><div><b>${fmtMoney(p.price_per_ml)}</b><span>за 1 мл</span></div>
+      <div style="text-align:right"><b>${p.bottle_price ? fmtMoney(p.bottle_price) : fmtMoney(min * p.price_per_ml)}</b><span>${p.bottle_price ? "флакон " + p.bottle_volume + " мл" : "от " + min + " мл"}</span></div></div>
+    <button class="btn" data-buy="${esc(p.id)}" ${out ? "disabled" : ""}>${out ? "Нет в наличии" : "Заказать"}</button>
+  </article>`;
+}
+const norm = s => String(s || "").toLowerCase().replace(/[’'`]/g, "'").replace(/ё/g, "е");
+function draw() {
+  const q = norm($("q").value.trim());
+  let list = items.filter(p =>
+    (!q || norm(p.house + " " + p.name).includes(q)) &&
+    (filter === "all" || (filter === "new" ? isNew(p) : (p.location || "").includes(filter))));
+  const s = $("sort").value;
+  if (s === "cheap") list = list.slice().sort((a, b) => a.price_per_ml - b.price_per_ml);
+  if (s === "dear") list = list.slice().sort((a, b) => b.price_per_ml - a.price_per_ml);
+  const n = list.length;
+  $("count").textContent = `${n} ${n % 10 === 1 && n % 100 !== 11 ? "аромат" : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? "аромата" : "ароматов"}`;
+  $("grid").innerHTML = n ? list.map(card).join("")
+    : `<p class="empty">Ничего не нашлось. Попробуй написать название по-другому или сбрось фильтр.</p>`;
+}
+async function load() {
+  try { items = await Store.list(); }
+  catch (e) { $("grid").innerHTML = `<p class="empty">Не удалось загрузить каталог: ${esc(e.message)}</p>`; return; }
+  draw();
+}
+let qt; $("q").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(draw, 120); });
+$("sort").onchange = draw;
+$("chips").addEventListener("click", e => {
+  const b = e.target.closest("[data-f]"); if (!b) return;
+  filter = b.dataset.f;
+  $("chips").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  draw();
+});
+
+// ---- заказ
 function openOrder(id) {
   cur = items.find(p => String(p.id) === id);
+  const min = cur.min_ml || 2;
   $("o-house").textContent = cur.house || ""; $("o-name").textContent = cur.name;
-  $("o-ml").max = cur.ml_left; $("o-ml").value = Math.min(5, cur.ml_left);
-  $("m-full").disabled = !cur.bottle_price || cur.ml_left < cur.bottle_volume;
-  $("m-full").title = $("m-full").disabled ? "Флакон уже начат" : "";
+  $("o-loc").innerHTML = locBadges(cur.location);
+  const canFull = !!(cur.bottle_price && cur.bottle_volume) && (cur.ml_left == null || cur.ml_left >= cur.bottle_volume);
+  $("segWrap").hidden = !(cur.bottle_price && cur.bottle_volume);
+  $("m-full").disabled = !canFull;
+  $("o-ml").min = min; if (cur.ml_left != null) $("o-ml").max = cur.ml_left; else $("o-ml").removeAttribute("max");
+  $("o-ml").value = Math.max(min, 5);
+  $("presets").innerHTML = [min, 5, 10, 15].filter((v, i, a) => a.indexOf(v) === i && v >= min && (cur.ml_left == null || v <= cur.ml_left))
+    .map(v => `<button type="button" data-ml="${v}">${v} мл</button>`).join("");
   $("o-err").textContent = ""; setMode(false); $("veil").hidden = false; $("o-ml").focus();
 }
 function setMode(f) { full = f; $("m-ml").setAttribute("aria-pressed", !f); $("m-full").setAttribute("aria-pressed", f); $("mlWrap").hidden = f; calc(); }
@@ -89,32 +190,36 @@ function calc() {
   if (full) { $("o-total").textContent = fmtMoney(cur.bottle_price); $("o-hint").textContent = `Целый флакон ${cur.bottle_volume} мл`; return; }
   const ml = Math.floor(+$("o-ml").value || 0);
   $("o-total").textContent = fmtMoney(ml * cur.price_per_ml);
-  $("o-hint").textContent = `${ml} мл × ${fmtMoney(cur.price_per_ml)}`;
+  $("o-hint").textContent = `${ml} мл × ${fmtMoney(cur.price_per_ml)}, атомайзер включён`;
+  $("presets").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.ml === ml));
 }
 $("grid").addEventListener("click", e => { const b = e.target.closest("[data-buy]"); if (b) openOrder(b.dataset.buy); });
+$("presets").addEventListener("click", e => { const b = e.target.closest("[data-ml]"); if (b) { $("o-ml").value = b.dataset.ml; calc(); } });
 $("m-ml").onclick = () => setMode(false); $("m-full").onclick = () => setMode(true);
 $("o-ml").oninput = calc;
-$("o-cancel").onclick = () => $("veil").hidden = true;
-$("veil").addEventListener("click", e => { if (e.target.id === "veil") $("veil").hidden = true; });
-document.addEventListener("keydown", e => { if (e.key === "Escape") $("veil").hidden = true; });
+const close = () => $("veil").hidden = true;
+$("o-cancel").onclick = close;
+$("veil").addEventListener("click", e => { if (e.target.id === "veil") close(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 
 $("orderForm").addEventListener("submit", async e => {
   e.preventDefault();
   const ml = Math.floor(+$("o-ml").value || 0), name = $("o-cust").value.trim(), phone = $("o-phone").value.trim();
-  if (!full && ml < 1) return $("o-err").textContent = "Укажи объём от 1 мл.";
-  if (!full && ml > cur.ml_left) return $("o-err").textContent = `В наличии только ${cur.ml_left} мл. Уменьши объём.`;
-  if (!name || phone.replace(/\D/g, "").length < 10) return $("o-err").textContent = "Заполни имя и телефон, чтобы продавец мог связаться.";
+  const min = cur.min_ml || 2;
+  if (!full && ml < min) return $("o-err").textContent = `Минимальный объём ${min} мл.`;
+  if (!full && cur.ml_left != null && ml > cur.ml_left) return $("o-err").textContent = `В наличии только ${cur.ml_left} мл. Уменьши объём.`;
+  if (!name || phone.replace(/\D/g, "").length < 10) return $("o-err").textContent = "Заполни имя и телефон, чтобы мы могли связаться.";
   $("o-submit").disabled = true;
   try {
     const res = await Store.placeOrder(cur.id, name, phone, ml, full);
     if (res !== "ok") { $("o-err").textContent = res; return; }
-    $("veil").hidden = true; toast("Заявка отправлена. Продавец скоро свяжется с тобой."); render();
+    close(); toast("Заявка отправлена. Мы скоро свяжемся с тобой."); load();
   } catch (err) { $("o-err").textContent = "Не получилось отправить: " + err.message; }
   finally { $("o-submit").disabled = false; }
 });
 let tt; function toast(t) { $("toast").textContent = t; $("toast").hidden = false; clearTimeout(tt); tt = setTimeout(() => $("toast").hidden = true, 3200); }
-$("reset").onclick = () => { Store.reset(); render(); toast("Демо сброшено"); };
-render();
+$("reset").onclick = () => { Store.reset(); load(); toast("Демо сброшено"); };
+load();
 </script>
 </body>
 </html>
