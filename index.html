@@ -227,6 +227,7 @@ $("copyPhone").onclick = async () => {
   catch (e) { getSelection().selectAllChildren($("phone")); }
 };
 $("demoBadge").hidden = $("demoFooter").hidden = Store.live;
+if (innerWidth < 420) $("q").placeholder = "Бренд или аромат";
 $("demoHint").hidden = Store.live;
 
 // ---------- каталог ----------
@@ -402,7 +403,8 @@ function addToCart(p, ml, isFull) {
 }
 function drawCart() {
   if (!cart.length) {
-    $("cartLines").innerHTML = `<div class="empty-cart"><p>Корзина пока пустая.</p><p class="notes">Нажми на любой аромат, выбери объём и добавь его сюда.</p></div>`;
+    $("cartLines").innerHTML = `<div class="empty-cart"><p>Корзина пока пустая.</p><p class="notes">Нажми на любой аромат, выбери объём и добавь его сюда.</p>
+      <button class="btn ghost" type="button" data-close-drawer style="margin-top:14px">К ароматам</button></div>`;
     $("cartFoot").hidden = true; return;
   }
   $("cartFoot").hidden = false;
@@ -499,6 +501,7 @@ function closeDrawer() {
 $("cartBtn").onclick = () => showView("cart");
 $("accountBtn").onclick = () => { afterAuth = "orders"; showView(me ? "orders" : "auth"); };
 $("d-close").onclick = closeDrawer;
+$("cartLines").addEventListener("click", e => { if (e.target.closest("[data-close-drawer]")) closeDrawer(); });
 $("dVeil").addEventListener("click", e => { if (e.target.id === "dVeil") closeDrawer(); });
 $("toOrders").onclick = () => showView("orders");
 
