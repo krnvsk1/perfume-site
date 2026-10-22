@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Управление</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <form class="panel login" id="loginView" hidden>
+    <h2>Вход</h2>
+    <label>Почта<input id="l-email" type="email" autocomplete="username" required></label>
+    <label>Пароль<input id="l-pass" type="password" autocomplete="current-password" required></label>
+    <p class="err" id="l-err"></p>
+    <button class="btn" type="submit">Войти</button>
+  </form>
+
+  <div id="adminView" hidden>
+    <header>
+      <div>
+        <div class="badge" id="demoBadge" hidden>Демо-режим, вход не нужен</div>
+        <h1>Управление витриной</h1>
+      </div>
+      <div class="row" style="flex:0 0 auto">
+        <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">Открыть витрину</a>
+        <button class="btn ghost small" id="logout" type="button">Выйти</button>
+      </div>
+    </header>
+
+    <div class="admin">
+      <form class="panel" id="addForm">
+        <h2>Новый аромат</h2>
+        <div class="row">
+          <label>Название<input id="f-name" required placeholder="Например, Ночной сад"></label>
+          <label>Бренд<input id="f-house" placeholder="Maison …"></label>
+        </div>
+        <label>Описание и ноты<textarea id="f-desc" rows="3" placeholder="Верх: бергамот. Сердце: ирис. База: мускус."></textarea></label>
+        <div class="row">
+          <label>Цена за 1 мл<input id="f-ppm" type="number" min="1" step="1" required></label>
+          <label>Цена флакона<input id="f-bp" type="number" min="1" step="1"></label>
+        </div>
+        <div class="row">
+          <label>Объём флакона, мл<input id="f-vol" type="number" min="1" step="1" required value="100"></label>
+          <label>Сейчас в наличии, мл<input id="f-left" type="number" min="0" step="1" required value="100"></label>
+        </div>
+        <div class="row">
+          <label>Фото<input id="f-photo" type="file" accept="image/*"></label>
+          <label>Цвет флакона без фото<input id="f-color" type="color" value="#6E3F84" style="height:44px;padding:4px"></label>
+        </div>
+        <p class="err" id="f-err"></p>
+        <button class="btn" type="submit" id="f-submit">Добавить на витрину</button>
+      </form>
+
+      <section class="panel">
+        <h2>Заявки</h2>
+        <div id="orders"><p class="notes">Заявок пока нет.</p></div>
+      </section>
+
+      <section class="panel wide">
+        <h2>Ароматы на витрине</h2>
+        <p class="notes">Остаток уменьшается сам при каждой заявке. Здесь его можно поправить вручную, например после пополнения.</p>
+        <div id="items"></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="store.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let tt; function toast(t) { $("toast").textContent = t; $("toast").hidden = false; clearTimeout(tt); tt = setTimeout(() => $("toast").hidden = true, 2800); }
+$("demoBadge").hidden = Store.live;
+$("logout").hidden = !Store.live;
+
+async function boot() {
+  const s = await Store.session();
+  $("loginView").hidden = !!s; $("adminView").hidden = !s;
+  if (s) refresh();
+}
+$("loginView").addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = await Store.signIn($("l-email").value.trim(), $("l-pass").value);
+  if (err) { $("l-err").textContent = "Неверная почта или пароль."; return; }
+  boot();
+});
+$("logout").onclick = async () => { await Store.signOut(); boot(); };
+
+async function refresh() {
+  try {
+    const [items, orders] = await Promise.all([Store.list(), Store.orders()]);
+    $("items").innerHTML = items.length ? items.map(p => `
+      <div class="item" data-id="${esc(p.id)}">
+        <div><b>${esc(p.name)}</b><small>${esc(p.house)} · ${fmtMoney(p.price_per_ml)}/мл · флакон ${p.bottle_volume} мл</small></div>
+        <label>В наличии, мл<input type="number" min="0" step="1" value="${p.ml_left}" data-left></label>
+        <div class="row" style="flex-wrap:nowrap"><button class="btn small" data-save>Сохранить</button><button class="btn ghost small" data-del>Удалить</button></div>
+      </div>`).join("") : `<p class="notes">Пока пусто. Добавь первый аромат в форме выше.</p>`;
+    $("orders").innerHTML = orders.length ? orders.map(o => `
+      <div class="order"><div class="t">${new Date(o.created_at).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</div>
+      <b>${esc(o.perfume_name)}</b> · ${o.full_bottle ? "флакон" : o.ml + " мл"} · ${fmtMoney(o.total)}<br>${esc(o.customer_name)}, ${esc(o.phone)}</div>`).join("")
+      : `<p class="notes">Заявок пока нет.</p>`;
+  } catch (e) { toast("Ошибка загрузки: " + e.message); }
+}
+
+$("items").addEventListener("click", async e => {
+  const row = e.target.closest(".item"); if (!row) return;
+  const id = row.dataset.id;
+  if (e.target.matches("[data-save]")) {
+    await Store.update(id, { ml_left: Math.max(0, Math.floor(+row.querySelector("[data-left]").value || 0)) });
+    toast("Остаток обновлён"); refresh();
+  }
+  if (e.target.matches("[data-del]")) {
+    if (e.target.dataset.confirm) { await Store.remove(id); toast("Аромат удалён"); refresh(); }
+    else { e.target.dataset.confirm = "1"; e.target.textContent = "Точно удалить?"; }
+  }
+});
+
+$("addForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const vol = Math.floor(+$("f-vol").value);
+  const item = {
+    name: $("f-name").value.trim(), house: $("f-house").value.trim(), description: $("f-desc").value.trim(),
+    price_per_ml: +$("f-ppm").value, bottle_price: +$("f-bp").value || null,
+    bottle_volume: vol, ml_left: Math.min(Math.floor(+$("f-left").value), vol), color: $("f-color").value
+  };
+  $("f-submit").disabled = true; $("f-err").textContent = "";
+  try { await Store.add(item, $("f-photo").files[0]); e.target.reset(); $("f-vol").value = 100; $("f-left").value = 100; toast("Аромат добавлен на витрину"); refresh(); }
+  catch (err) { $("f-err").textContent = "Не получилось сохранить: " + err.message; }
+  finally { $("f-submit").disabled = false; }
+});
+boot();
+</script>
+</body>
+</html>
