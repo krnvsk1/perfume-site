@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Управление</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="adm">
@@ -24,7 +24,7 @@
     <header>
       <div>
         <div class="badge" id="demoBadge" hidden>Демо-режим, вход не нужен</div>
-        <h1>Управление витриной</h1>
+        <div class="brand"><svg class="mark" viewBox="0 0 64 76" aria-hidden="true"><path d="M7 74V31a25 25 0 0 1 50 0v43" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M13 74V32a19 19 0 0 1 38 0v42" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/><path d="M32 2l3.2 3.2L32 8.4l-3.2-3.2z" fill="currentColor"/><text x="32" y="60" text-anchor="middle" font-family="Forum, Georgia, serif" font-size="25" fill="var(--fg)" letter-spacing=".5">ПК</text></svg><h1>Управление витриной</h1></div>
       </div>
       <div class="row" style="flex:0 0 auto">
         <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">Открыть витрину</a>
@@ -53,7 +53,7 @@
         <input id="iq" type="search" placeholder="Найти аромат">
         <select id="iFilter" aria-label="Показать">
           <option value="">Все</option><option value="low">Заканчиваются</option><option value="hidden">Скрытые</option>
-          <option value="new">Новинки</option><option value="nophoto">Без фото</option>
+          <option value="new">Новинки</option><option value="nophoto">Без фото</option><option value="nofam">Без семейства</option>
         </select>
         <button class="btn small" type="button" id="addBtn">+ Новый аромат</button>
       </div>
@@ -80,6 +80,8 @@
       <label>Название<input id="f-name" required placeholder="Red Tobacco"></label>
     </div>
     <label>Описание<textarea id="f-desc" rows="2" placeholder="Ноты, «похож на …»"></textarea></label>
+    <label>Семейство — от него зависит цвет флакона на витрине
+      <select id="f-fam"></select></label>
     <label>Теги через запятую<input id="f-tags" placeholder="древесный, пряный, унисекс" list="tagList"></label>
     <datalist id="tagList"></datalist>
     <label class="check"><input type="checkbox" id="f-new"><span>Метка «Новинка»</span></label>
@@ -224,17 +226,20 @@ $("csv").onclick = () => {
 };
 
 // ---------- ароматы ----------
-const thumb = p => p.photo_url ? `<img class="thumb" src="${esc(p.photo_url)}" alt="" loading="lazy">` : `<span class="thumb" style="background:${esc(p.color)}"></span>`;
+const famColor = p => (FAMILIES[(p.family || "").toLowerCase()] || {}).color || NO_FAMILY_COLOR;
+const famLabel = p => (FAMILIES[(p.family || "").toLowerCase()] || {}).label || "";
+const thumb = p => p.photo_url ? `<img class="thumb" src="${esc(p.photo_url)}" alt="" loading="lazy">` : `<span class="thumb" style="background:${esc(famColor(p))}"></span>`;
+$("f-fam").innerHTML = `<option value="">Не указано</option>` + Object.entries(FAMILIES).map(([k, f]) => `<option value="${esc(k)}">${esc(f.label)}</option>`).join("");
 function drawItems() {
   const q = $("iq").value.trim().toLowerCase(), f = $("iFilter").value;
   const list = all.filter(p => (!q || (p.house + " " + p.name).toLowerCase().includes(q)) &&
-    (!f || (f === "low" && isLow(p)) || (f === "hidden" && p.hidden) || (f === "new" && p.is_new) || (f === "nophoto" && !p.photo_url)));
+    (!f || (f === "low" && isLow(p)) || (f === "hidden" && p.hidden) || (f === "new" && p.is_new) || (f === "nophoto" && !p.photo_url) || (f === "nofam" && !FAMILIES[(p.family || "").toLowerCase()])));
   const lim = q || f ? 200 : 60;
   $("items").innerHTML = list.length ? list.slice(0, lim).map(p => `
     <div class="item ${p.hidden ? "is-hidden" : ""}" data-id="${esc(p.id)}">
       ${thumb(p)}
       <div class="item-name"><b>${esc(p.house)} ${esc(p.name)}</b>
-        <small>${[p.is_new ? "новинка" : "", p.location ? "тест: " + [...p.location].map(k => k === "Н" ? "Народная" : k === "П" ? "Жлобы" : k).join(", ") : "", p.hidden ? "скрыт с витрины" : "", isLow(p) ? "заканчивается" : ""].filter(Boolean).join(" · ") || "на витрине"}</small></div>
+        <small>${[famLabel(p).toLowerCase(), p.is_new ? "новинка" : "", p.location ? "тест: " + [...p.location].map(k => k === "Н" ? "Народная" : k === "П" ? "Жлобы" : k).join(", ") : "", p.hidden ? "скрыт с витрины" : "", isLow(p) ? "заканчивается" : ""].filter(Boolean).join(" · ") || "на витрине"}</small></div>
       <label>₽ за мл<input type="number" min="1" step="1" value="${p.price_per_ml}" data-ppm inputmode="numeric"></label>
       <label>Остаток<input type="number" min="0" step="1" value="${p.ml_left ?? ""}" placeholder="—" data-left inputmode="numeric"></label>
       <div class="ctl">
@@ -271,7 +276,7 @@ $("items").addEventListener("click", async e => {
 // ---------- редактор ----------
 let photoUrl = null;
 function setPic(src, p) {
-  $("ed-pic").innerHTML = src ? `<img src="${esc(src)}" alt="">` : `<span class="thumb big" style="background:${esc((p && p.color) || "var(--line)")}"></span>`;
+  $("ed-pic").innerHTML = src ? `<img src="${esc(src)}" alt="">` : `<span class="thumb big" style="background:${esc(p ? famColor(p) : "var(--line)")}"></span>`;
 }
 function openEditor(id) {
   editing = id ? all.find(x => String(x.id) === String(id)) : null;
@@ -280,6 +285,7 @@ function openEditor(id) {
   $("f-house").value = p.house || ""; $("f-name").value = p.name || "";
   $("f-desc").value = (p.description || "").replace(/новинка\s*\d*/i, "").trim();
   $("f-tags").value = tagsOf(p).join(", ");
+  $("f-fam").value = FAMILIES[(p.family || "").toLowerCase()] ? p.family.toLowerCase() : "";
   $("f-new").checked = !!p.is_new || /новинка/i.test(p.description || "");
   $("f-ppm").value = p.price_per_ml ?? ""; $("f-min").value = p.min_ml ?? 2;
   $("f-loc").value = p.location || ""; $("f-left").value = p.ml_left ?? "";
@@ -310,7 +316,7 @@ $("edForm").addEventListener("submit", async e => {
   const item = {
     house, name, description: $("f-desc").value.trim() || null,
     tags: [...new Set($("f-tags").value.split(",").map(t => t.trim().toLowerCase()).filter(Boolean))],
-    is_new: $("f-new").checked, hidden: $("f-hidden").checked,
+    is_new: $("f-new").checked, hidden: $("f-hidden").checked, family: $("f-fam").value || null,
     price_per_ml: ppm, min_ml: num($("f-min").value) || 2, location: $("f-loc").value || null,
     ml_left: num($("f-left").value), bottle_price: bp, bottle_volume: bp ? vol : null
   };

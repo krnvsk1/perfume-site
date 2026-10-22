@@ -2,7 +2,7 @@
 (function () {
   const cfg = window.APP_CONFIG || {};
   const live = !!(cfg.SUPABASE_URL && cfg.SUPABASE_KEY && window.supabase);
-  const KEY = "perfume-site-demo-v5";
+  const KEY = "perfume-site-demo-v6";
   const ME = KEY + "-me";
   const DEMO_CODE = "1234";
   const seed = () => JSON.parse(JSON.stringify(window.CATALOG || []));
@@ -210,6 +210,21 @@
   window.Store = live ? remote : demo;
 
   window.compressImage = compressImage;
+
+  // Семейства ароматов: цвет «жидкости» во флаконе и фильтр на витрине
+  window.FAMILIES = {
+    "цветочный":  { label: "Цветочный",  color: "#D4849F" },
+    "фруктовый":  { label: "Фруктовый",  color: "#E07A5F" },
+    "цитрусовый": { label: "Цитрусовый", color: "#E3B341" },
+    "свежий":     { label: "Свежий",     color: "#5FA3C7" },
+    "зелёный":    { label: "Зелёный",    color: "#7FA86A" },
+    "древесный":  { label: "Древесный",  color: "#8C6A4F" },
+    "восточный":  { label: "Восточный",  color: "#B85C38" },
+    "гурманский": { label: "Гурманский", color: "#C9965B" },
+    "кожаный":    { label: "Кожаный и табачный", color: "#5E4336" },
+    "пудровый":   { label: "Пудровый и мускусный", color: "#B9A3C9" }
+  };
+  window.NO_FAMILY_COLOR = "#D9C6A0"; // семейство не указано: спокойный «шампанский» цвет, как у обычной парфюмерной жидкости
   window.STATUS = { new: "Принят", ready: "Готов к выдаче", done: "Выдан", cancelled: "Отменён" };
   // +79615848384 → +7 (961) 584-83-84
   window.fmtPhone = ph => { const d = String(ph || "").replace(/\D/g, ""); return d.length === 11 && d[0] === "7" ? `+7 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7, 9)}-${d.slice(9)}` : ph || ""; };

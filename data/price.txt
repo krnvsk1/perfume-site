@@ -1,328 +1,330 @@
 # Прайс распива с taplink.cc/parfumroom_krd (22.10.2026)
-# бренд | аромат | цена за 1 мл | где потестить (Н — Народная 68А, П — Жлобы 139) | пометка | теги через запятую
+# бренд | аромат | цена за 1 мл | где потестить (Н — Народная 68А, П — Жлобы 139) | пометка | теги через запятую | семейство
 # «новинка» в пометке ставит метку «Новинка». Теги (древесный, цветочный, унисекс…) становятся фильтрами на витрине.
-Acqua di Parma|Camelia|140|Н|
-ArteOlfatto|Brise Marine|130|П|
-ArteOlfatto|Black Hashish|170|П|
-Armani|Power Of You|210|Н|новинка 2026
-Armani|Stronger With You Intensely|140|Н|
-Arcadia|London|140|Н|
-Arcadia|Auric|140|П|
-Argos|Brivido Della Caccia|250||
-Atelier Cologne|Lemon Island|180|Н|
-Atelier Cologne|Cedre Atlas|230|Н|
-Atelier Cologne|Clementine California|210|Н|
-Atelier des Ors|Pink Me Up|190|П|
-Attar Collection|Areej|130|П|
-Attar Collection|Musk Kashmir|140|П|
-Attar Collection|Musk Kashmir Extrait|200|Н|
-Attar Collection|Khaltat Night|120|Н|
-Attar Collection|Fleur de Santal|120|Н|
-Attar Collection|Crystal Love|140|П|
-Attar Collection|Capella|120|Н|
-Attar Collection|The Queen of Sheba|110|Н|
-Attar Collection|Azora|120|НП|
-Attar Collection|Hayti|130|П|
-Attar Collection|Annabella|120|П|
-Attar Collection|Sierra|120|П|
-Ajmal|Amber Wood|140|П|
-Afnan|Rare Reef|100|П|похож на LV Pacific Chill
-Afnan|Supremacy Silver Pour Homme|70|НП|
-Afnan|Turathi Electric|100|НП|
-Afnan|Supremacy Purple|100|П|
-Armaf|Odyssey Candy|90|Н|
-Armaf|Odyssey Mandarin Sky|80|Н|
-Antonio|Almost A Virgin|90|П|
-Ariana Grande|God Is A Woman|100|Н|
-Amouage|Guidance|400|П|
-Amouage|Search|280|Н|
-Amouage|Overture Man|350|П|
-Amouage|Honour Woman|370|П|
-27 87|Mosaique|140|П|
-BDK Parfums|Tabac Rose|150|Н|
-Banana Republic|Dark Cherry & Amber|120|Н|
-Banana Republic|Tobacco & Tonka Bean|120|Н|
-Byredo|Bibliotheque|290|П|
-Byredo|Young Rose|250|Н|
-Byredo|Mixed Emotions|250|Н|
-Byredo|Bal d'Afrique|270|П|
-Byredo|La Tulipe|250|Н|
-Byredo|Blanche|270|П|
-Bvlgari|Tygar|350|НП|
-ByBozo|Habibi|190|П|
-ByBozo|Sea Breeze|190|П|
-Bois 1920|Notturno Fiorentino|140|П|
-Boadicea the Victorious|Glorious|280|Н|
-Boadicea the Victorious|Heroine|360|Н|
-Escentric Molecules|Molecule 01 + Guaiac Wood|160|П|
-Escentric Molecules|Molecule 01 + Iris|210|Н|
-Escentric Molecules|Molecule 01 + Black Tea|200|Н|
-Escentric Molecules|Molecule 01 + Mandarin|220|НП|
-Escentric Molecules|Molecule 02|210|П|
-Escentric Molecules|Escentric 02|200|П|
-Essential Parfums|Bois Imperial|160|НП|
-Essential Parfums|Mon Vetiver|100|Н|
-Essential Parfums|Nice Bergamote|100|НП|
-Essential Parfums|Patchouli Mania|100|Н|
-Etat Libre d'Orange|Let's Pretend|230|Н|новинка 2026
-Etat Libre d'Orange|I Am Trash — Les Fleurs du Dechet|140|П|
-Etat Libre d'Orange|Hermann a mes cotes me paraissait une ombre|220|П|
-Etat Libre d'Orange|Remarkable People|120|Н|
-Etat Libre d'Orange|Experimentum Crucis|180|Н|
-Etat Libre d'Orange|Like This Tilda Swinton|140|Н|
-Ex Nihilo|Devil Tender|230|П|
-Ex Nihilo|Spiky Muse|260|П|
-Ex Nihilo|Generation(s)|250|П|
-Ex Nihilo|Blue Talisman|360|П|
-Ella K|Musc K|240|П|
-Clive Christian|Matsukita|580|Н|
-Chanel|Chance Eau Fraiche|230|Н|
-Chanel|Chance Splendide|240|Н|
-Chanel|Allure Homme Sport|210|П|
-Chanel|Bleu de Chanel|220|П|
-Chanel|1932|310|Н|бутиковая линейка
-Chanel|Coco Mademoiselle L'Eau Privee Crush Absolu|280|Н|
-Chopard|Vetiver d'Haiti au The Vert|260|Н|
-Genyum|Tattoo Artist|150|П|
-Genyum|Painter|250|П|
-Genyum|Ballerina|200|П|
-Goldfield & Banks|Pacific Rock Moss|150|П|
-Goldfield & Banks|Bohemian Lime|150|П|
-Guerlain|Homme EDP|120|П|
-Guerlain|Oud Nude|400|Н|
-Guerlain|Aqua Allegoria Nettare di Sole|110|П|
-Guerlain|Aqua Allegoria Flora Salvaggia|110|Н|
-Carolina Herrera|212 VIP Men|110|П|
-Cacharel|Noa|80|Н|
-Carner Barcelona|Ibiza Nights|180|П|
-Carner Barcelona|Revolucion|180|П|
-Chloe|Atelier des Fleurs Cedrus Intense|200|НП|
-Chloe|Atelier des Fleurs Cedrus|240|П|
-Chloe|Atelier des Fleurs Violette|180|Н|
-Chloe|Atelier des Fleurs Lavanda|230|Н|
-Clean|Air|100|Н|
-Gritti|Tangerina|140|Н|
-Gritti|Tutu Blanc|150|Н|
-Gritti|Pomelo Sorrento|140|Н|
-Chambre 52|Orencie|230|Н|
-Chambre 52|Soleil Tonka|190|Н|
-Chabaud Maison de Parfum|Mon Tiramisu|90||
-Fugazzi|Angel Dust|200|Н|
-Francesca Bianchi|The Code of Emotion|290||
-Floraiku|Levitating|290||
-Floraiku|I Am Coming Home|310||
-French Avenue|Elinor Green|100|Н|
-French Avenue|Spectre Wraith|100|Н|
-Franck Boclet|Tobacco|110|П|
-Initio|Narcotic Delight|350|П|
-Initio|Musk Therapy|310|П|
-Initio|Power Self|270|Н|
-Initio|Oud for Happiness|270|П|
-Initio|Rehab|280|П|
-Initio|Paragon|280|Н|
-Initio|Oud for Greatness|280|П|
-Jacques Zolty|Cubata|130|П|
-Jo Malone|Wild Bluebell|180|П|
-Jo Malone|Wood Sage & Sea Salt|180|П|
-Jo Malone|Blackberry & Bay|190|П|
-Jenny Glow|Berry & Bay|80|Н|
-Jenny Glow|Black Cedar|50|Н|
-Jenny Glow|Freesia & Pear|80|П|
-Jenny Glow|Wood Sage|80|Н|
-John Varvatos|Artisan Pure|80|Н|
-John Varvatos|John Varvatos|100|П|
-Juliette Has a Gun|Banana Rush|130|П|
-Juliette Has a Gun|Ex Vetiver|110|П|
-Juliette Has a Gun|Not a Perfume|110|НП|
-Juliette Has a Gun|Not a Perfume Superdose|120|Н|
-Juliette Has a Gun|Sunny Side Up|100|П|
-Juliette Has a Gun|Juliette|120|Н|
-Juliette Has a Gun|Pear Inc.|120|НП|
-Juliette Has a Gun|Powder Love|130|Н|новинка 2025
-Juliette Has a Gun|Moscow Mule|120|П|
-Juliette Has a Gun|Vanilla Vibes|130|П|
-Juliette Has a Gun|Miami Shake|120|П|
-Juliette Has a Gun|Ode to Dullness|100|Н|
-Judith Leiber|Amethyst|110|Н|
-Judith Leiber|Topaz|100|П|
-HFC|Private Code|220|Н|
-HFC|Indian Venus|280|Н|
-HFC|Nirvanesque|210|Н|
-HFC|Sword Dancer|210|Н|
-HFC|Fly to Miracle|250|П|
-HFC|Forbidden Whisper|300|Н|новинка
-HFC|Diamond in the Sky|260|П|
-HFC|Wear Love Everywhere|250|П|
-HFC|Wrap Me in Dreams|280|Н|
-HFC|Devil's Intrigue|430|П|
-Hermetica|Rosefire|100|П|
-Hermetica|Vaninight|100|Н|
-Hermetica|Ivyme|100|Н|
-Hermes|H24|120|Н|
-Hermes|Barenia|150|Н|
-Histoires de Parfums|This Is Not A Blue Bottle 1.5|140|Н|
-Kajal|Lamar|140|Н|
-Kajal|Dahab|160|П|
-Hormone Paris|Gaba|250|П|
-Hormone Paris|This Is Not Caffeine|240|Н|
-Kilian|Liaisons Dangereuses, Typical Me|250|Н|
-Kilian|Good Girl Gone Bad Eau Fraiche|330|НП|
-Kilian|Good Girl Gone Bad|350|НП|
-Kilian|Rolling in Love|300|Н|
-Kilian|L'Heure Verte|310|Н|
-Kilian|Angels' Share|350|Н|
-Marc-Antoine Barrois|Ganymede|260|П|
-Marc-Antoine Barrois|Tilia|300|НП|
-Marc-Antoine Barrois|Encelade|240|Н|
-Matiere Premiere|Parisian Musc|240|Н|
-Miller et Bertaux|New Study|100|П|
-Miller et Bertaux|#3 Green, Green|100|Н|
-Moschino|Toy Boy|100||
-M.INT|The Smart Set|180|П|
-M.INT|Ten Strike|140|П|
-M.INT|Azure Haze|160|Н|
-Maison Noir|Vertigo 236|230|Н|
-Maison Crivelli|Oud Maracuja|580|Н|
-Maison Margiela|Replica By the Fireplace|160|Н|
-Maison Margiela|Replica Under the Lemon Trees|180|Н|
-Masque Milano|Lost Alice|260|Н|
-Milano Fragranze|Panettone|130|Н|
-Milano Fragranze|Basilica|130|Н|
-Max Philip|Cherry|130|П|
-Max Philip|Pink|140|НП|
-Max Philip|Floral|150|Н|
-Map of the Heart|Purple Heart V.5|150|Н|
-Map of the Heart|Pink Heart V.6|180|Н|
-Mancera|Fig Me Up|100|Н|
-Mancera|Amberful|120|Н|
-Mancera|Instant Crush|120|П|
-Mancera|Red Tobacco|120|НП|
-Mancera|Xplicit Vanilla|130|П|
-Mancera|Cedrat Boise|120|П|
-Mancera|Amore Caffe|130|П|
-Mancera|Feminity|120|П|
-Mancera|Sicily|120|НП|
-Mancera|Melody of the Sun|120|П|
-Mancera|Hindu Kush|120|П|
-Mancera|Cosmic Pepper|120|П|
-Mancera|Lemon Line|120|П|
-Memo|Inverness|250|Н|
-Memo|Italian Leather|330|П|
-Memo|African Leather|270|Н|
-Memo|Marfa|300|П|
-Montale|Bubble Forever|120|Н|
-Montale|Dallachai|120|Н|
-Montale|Oud Sapparot|120|Н|
-Montale|Arabians Tonka|120|П|
-Montale|Oud Tobacco|120|П|
-Montale|Intense Cafe|120|П|
-Montale|Red Vetiver|120|Н|
-Montale|Infinity|120|П|
-Montale|Vanilla Cake|110|П|
-Nasomatto|Black Afgano Extrait|580||
-Noran Perfumes|Arjan 1954 Red|80|П|
-Noran Perfumes|Moon White|100|Н|
-Nobile 1942|Rudis|200|Н|
-Nobile 1942|Malia|220|Н|
-Nobile 1942|La Danza delle Libellule|170|П|
-The House of Oud|The Time|220|П|
-The House of Oud|Up to the Moon|190|П|
-The House of Oud|Empathy|240|П|
-Thomas Kosmala|No 4 Apres l'Amour|140|П|
-Thomas Kosmala|No 4 Neon|150|П|
-Thomas Kosmala|No 10 Desir du Coeur|130|Н|
-Thomas Kosmala|Star Chaser|190|П|
-Theodoros Kalotinis|Pearl Gelato|220||
-Trussardi|Donna Pink Marina|100|Н|
-Trussardi|Donna|100|П|
-Trussardi|Shopping Via della Spiga|180|Н|
-Tom Ford|Ombre Leather|240|П|
-Tom Ford|Eau d'Ombre Leather (2024)|230|Н|
-Tom Ford|Soleil Neige (2025)|330|Н|
-Paco Rabanne|Invictus|110|Н|
-Paradis des Sens|Felicity|170|Н|
-Patrice Martin|Miss Cherry|150|П|
-Patrice Martin|Wild Hibiscus|180|Н|
-Parle Moi de Parfum|Orris Tattoo|220|П|
-Parle Moi de Parfum|Milky Musk|220|П|
-Parle Moi de Parfum|Orange Hyper Essence / X|220|П|
-Parle Moi de Parfum|Chypre Mojo/45|210|П|
-Parfums de Marly|Delina|370|П|
-Parfums de Marly|Greenley|200|Н|
-Parfums de Marly|Althair|260|П|
-Parfums de Marly|Castley|190|Н|
-Parfums de Marly|Layton|300|П|
-Pierre Guillaume|Le Musc & La Peau 4.1|210|Н|
-Premiere Note|Orange Calabria|100|П|
-Penhaligon's|Vra Vra Vroom|280|Н|
-Nicolai Parfumeur Createur|Riviera Verbena|180|Н|
-Nicolai Parfumeur Createur|Pavlova|220|Н|
-Serge Lutens|Parole d'Eau|140|Н|
-Serge Lutens|Feminite du Bois|190|Н|
-Oscar de la Renta|Bella Blanca|100|Н|
-Oscar de la Renta|Bella Essence|100|Н|
-Orto Parisi|Terroni|350|П|
-Orto Parisi|Megamare|390|П|
-Orlov|Empower You|100|П|
-Orlov|De Young Red|180|П|
-Ormonde Jayne|Verano|280|П|
-Ormonde Jayne|Champaca|250|П|
-Osmassino|Black Leaf Kiss|180||новинка 2026
-Osmassino|Eat Me Up|180|Н|
-La Sultane de Saba|Voyage sur la Route des Epices|180|Н|
-Les Liquides Imaginaires|Ame du Coeur|190|Н|
-Les Liquides Imaginaires|Blanche Bete|270|Н|
-Louis Vuitton|Imagination|600|П|
-Laboratorio Olfattivo|Mandarino|150|Н|
-Lattafa|Yara|100|П|
-Lattafa|Pink to Pink|100|П|
-Lattafa|Khamrah|100|П|
-Lalique|Encre Noire|80|П|
-Lalique|Amethyst|80|НП|
-Laurent Mazzone|Chemise Blanche|180|П|
-Laurent Mazzone|Dulce Pear|200|Н|
-Laurent Mazzone|Sensual Orchid|230|П|
-Loewe|001 Man|130|Н|
-Le Labo|Another 13|370|Н|
-Rochas|Mademoiselle Rochas|100|Н|
-Roja|Elysium Pour Homme Eau Intense|250|Н|
-Roja|Elysium Pour Homme|300|П|
-Richard|White Chocola|220|П|
-Rosendo Mateu|No 5|180|П|
-RudRoss|Vanilla Love|150|П|
-RudRoss|Mira|120|Н|
-RudRoss|Lust for Life|130|Н|
-Sud Pacifique|O'Pomelo|60|П|
-Voyage Royal|Dracula|60|Н|
-Vilhelm Parfumerie|Smoke Show|220|Н|
-Vilhelm Parfumerie|Chimilka|280|Н|
-Vilhelm Parfumerie|Morning Chess|250|П|
-Vilhelm Parfumerie|Dear Polly|250|П|
-Vilhelm Parfumerie|Sparkling Jo|260|П|
-Vilhelm Parfumerie|Room Service|260|П|
-Vilhelm Parfumerie|Mango Skin|260|П|
-Vilhelm Parfumerie|Basilico & Fellini|240|Н|
-Vertus|Narcos'is|160|Н|
-Versace|Eros Energy|100|Н|
-Versace|Atelier Versace Figue Blanche|230||
-Veronique Gabai|Mimosa in the Air|190|Н|
-Voskanian Parfums|Cocktail de Minuit|380|Н|
-Voronoi|Cassis Vert|170|Н|российская ниша
-What We Do Is Secret|Messy Sexy Just Rolled Out of Bed|230|Н|
-Roos & Roos|Pale Blue Eyes|150|П|
-Xerjoff|Torino 21|260|П|
-Xerjoff|Torino 24|250|П|
-Casamorati|Mefisto|210|П|
-Casamorati|Dama Bianca|250|П|
-Casamorati|Gran Ballo|190|Н|
-Casamorati|Lira|250|П|
-Zadig & Voltaire|This Is Him!|100|Н|
-Zadig & Voltaire|This Is Her!|100|Н|
-Zarkoperfume|Purple Molecule 070.07|140|Н|
-Zarkoperfume|Pink Molecule 090.09|140|НП|
-Zarkoperfume|Cloud Collection No 1|150|Н|
-Zarkoperfume|The Muse|140|Н|
-Zarkoperfume|Molecule 234.38|120|П|
-Zarkoperfume|Carate Urio|130|Н|
-Zielinski & Rozen|Pink Pepper, Elemi, Cinnamon|240|Н|
-Yves Saint Laurent|Black Opium|180|П|
+# Семейство (цветочный, фруктовый, цитрусовый, свежий, зелёный, древесный, восточный, гурманский, кожаный, пудровый) задаёт цвет флакона и фильтр на витрине.
+# Сейчас оно проставлено только там, где нота однозначно видна из названия, — остальные стоит дополнить.
+Acqua di Parma|Camelia|140|Н|||цветочный
+ArteOlfatto|Brise Marine|130|П|||свежий
+ArteOlfatto|Black Hashish|170|П|||восточный
+Armani|Power Of You|210|Н|новинка 2026||
+Armani|Stronger With You Intensely|140|Н
+Arcadia|London|140|Н
+Arcadia|Auric|140|П
+Argos|Brivido Della Caccia|250
+Atelier Cologne|Lemon Island|180|Н|||цитрусовый
+Atelier Cologne|Cedre Atlas|230|Н|||древесный
+Atelier Cologne|Clementine California|210|Н|||цитрусовый
+Atelier des Ors|Pink Me Up|190|П
+Attar Collection|Areej|130|П
+Attar Collection|Musk Kashmir|140|П|||пудровый
+Attar Collection|Musk Kashmir Extrait|200|Н|||пудровый
+Attar Collection|Khaltat Night|120|Н|||восточный
+Attar Collection|Fleur de Santal|120|Н|||древесный
+Attar Collection|Crystal Love|140|П
+Attar Collection|Capella|120|Н
+Attar Collection|The Queen of Sheba|110|Н
+Attar Collection|Azora|120|НП
+Attar Collection|Hayti|130|П
+Attar Collection|Annabella|120|П
+Attar Collection|Sierra|120|П
+Ajmal|Amber Wood|140|П|||восточный
+Afnan|Rare Reef|100|П|похож на LV Pacific Chill||свежий
+Afnan|Supremacy Silver Pour Homme|70|НП
+Afnan|Turathi Electric|100|НП
+Afnan|Supremacy Purple|100|П
+Armaf|Odyssey Candy|90|Н|||гурманский
+Armaf|Odyssey Mandarin Sky|80|Н|||цитрусовый
+Antonio|Almost A Virgin|90|П
+Ariana Grande|God Is A Woman|100|Н
+Amouage|Guidance|400|П
+Amouage|Search|280|Н
+Amouage|Overture Man|350|П
+Amouage|Honour Woman|370|П
+27 87|Mosaique|140|П
+BDK Parfums|Tabac Rose|150|Н|||кожаный
+Banana Republic|Dark Cherry & Amber|120|Н|||фруктовый
+Banana Republic|Tobacco & Tonka Bean|120|Н|||кожаный
+Byredo|Bibliotheque|290|П
+Byredo|Young Rose|250|Н|||цветочный
+Byredo|Mixed Emotions|250|Н
+Byredo|Bal d'Afrique|270|П
+Byredo|La Tulipe|250|Н
+Byredo|Blanche|270|П
+Bvlgari|Tygar|350|НП
+ByBozo|Habibi|190|П
+ByBozo|Sea Breeze|190|П|||свежий
+Bois 1920|Notturno Fiorentino|140|П
+Boadicea the Victorious|Glorious|280|Н
+Boadicea the Victorious|Heroine|360|Н
+Escentric Molecules|Molecule 01 + Guaiac Wood|160|П|||древесный
+Escentric Molecules|Molecule 01 + Iris|210|Н|||цветочный
+Escentric Molecules|Molecule 01 + Black Tea|200|Н|||зелёный
+Escentric Molecules|Molecule 01 + Mandarin|220|НП|||цитрусовый
+Escentric Molecules|Molecule 02|210|П
+Escentric Molecules|Escentric 02|200|П
+Essential Parfums|Bois Imperial|160|НП|||древесный
+Essential Parfums|Mon Vetiver|100|Н|||древесный
+Essential Parfums|Nice Bergamote|100|НП|||цитрусовый
+Essential Parfums|Patchouli Mania|100|Н|||древесный
+Etat Libre d'Orange|Let's Pretend|230|Н|новинка 2026||
+Etat Libre d'Orange|I Am Trash — Les Fleurs du Dechet|140|П|||цветочный
+Etat Libre d'Orange|Hermann a mes cotes me paraissait une ombre|220|П
+Etat Libre d'Orange|Remarkable People|120|Н
+Etat Libre d'Orange|Experimentum Crucis|180|Н
+Etat Libre d'Orange|Like This Tilda Swinton|140|Н
+Ex Nihilo|Devil Tender|230|П
+Ex Nihilo|Spiky Muse|260|П
+Ex Nihilo|Generation(s)|250|П
+Ex Nihilo|Blue Talisman|360|П
+Ella K|Musc K|240|П|||пудровый
+Clive Christian|Matsukita|580|Н
+Chanel|Chance Eau Fraiche|230|Н
+Chanel|Chance Splendide|240|Н
+Chanel|Allure Homme Sport|210|П
+Chanel|Bleu de Chanel|220|П
+Chanel|1932|310|Н|бутиковая линейка||
+Chanel|Coco Mademoiselle L'Eau Privee Crush Absolu|280|Н
+Chopard|Vetiver d'Haiti au The Vert|260|Н|||зелёный
+Genyum|Tattoo Artist|150|П
+Genyum|Painter|250|П
+Genyum|Ballerina|200|П
+Goldfield & Banks|Pacific Rock Moss|150|П|||свежий
+Goldfield & Banks|Bohemian Lime|150|П|||цитрусовый
+Guerlain|Homme EDP|120|П
+Guerlain|Oud Nude|400|Н|||восточный
+Guerlain|Aqua Allegoria Nettare di Sole|110|П
+Guerlain|Aqua Allegoria Flora Salvaggia|110|Н
+Carolina Herrera|212 VIP Men|110|П
+Cacharel|Noa|80|Н
+Carner Barcelona|Ibiza Nights|180|П
+Carner Barcelona|Revolucion|180|П
+Chloe|Atelier des Fleurs Cedrus Intense|200|НП|||древесный
+Chloe|Atelier des Fleurs Cedrus|240|П|||древесный
+Chloe|Atelier des Fleurs Violette|180|Н|||цветочный
+Chloe|Atelier des Fleurs Lavanda|230|Н|||цветочный
+Clean|Air|100|Н
+Gritti|Tangerina|140|Н
+Gritti|Tutu Blanc|150|Н
+Gritti|Pomelo Sorrento|140|Н
+Chambre 52|Orencie|230|Н
+Chambre 52|Soleil Tonka|190|Н|||гурманский
+Chabaud Maison de Parfum|Mon Tiramisu|90
+Fugazzi|Angel Dust|200|Н
+Francesca Bianchi|The Code of Emotion|290
+Floraiku|Levitating|290
+Floraiku|I Am Coming Home|310
+French Avenue|Elinor Green|100|Н|||зелёный
+French Avenue|Spectre Wraith|100|Н
+Franck Boclet|Tobacco|110|П|||кожаный
+Initio|Narcotic Delight|350|П
+Initio|Musk Therapy|310|П|||пудровый
+Initio|Power Self|270|Н
+Initio|Oud for Happiness|270|П|||восточный
+Initio|Rehab|280|П
+Initio|Paragon|280|Н
+Initio|Oud for Greatness|280|П|||восточный
+Jacques Zolty|Cubata|130|П
+Jo Malone|Wild Bluebell|180|П
+Jo Malone|Wood Sage & Sea Salt|180|П|||свежий
+Jo Malone|Blackberry & Bay|190|П
+Jenny Glow|Berry & Bay|80|Н|||фруктовый
+Jenny Glow|Black Cedar|50|Н|||древесный
+Jenny Glow|Freesia & Pear|80|П|||фруктовый
+Jenny Glow|Wood Sage|80|Н|||древесный
+John Varvatos|Artisan Pure|80|Н
+John Varvatos|John Varvatos|100|П
+Juliette Has a Gun|Banana Rush|130|П|||фруктовый
+Juliette Has a Gun|Ex Vetiver|110|П|||древесный
+Juliette Has a Gun|Not a Perfume|110|НП
+Juliette Has a Gun|Not a Perfume Superdose|120|Н
+Juliette Has a Gun|Sunny Side Up|100|П
+Juliette Has a Gun|Juliette|120|Н
+Juliette Has a Gun|Pear Inc.|120|НП|||фруктовый
+Juliette Has a Gun|Powder Love|130|Н|новинка 2025||пудровый
+Juliette Has a Gun|Moscow Mule|120|П
+Juliette Has a Gun|Vanilla Vibes|130|П|||гурманский
+Juliette Has a Gun|Miami Shake|120|П
+Juliette Has a Gun|Ode to Dullness|100|Н
+Judith Leiber|Amethyst|110|Н
+Judith Leiber|Topaz|100|П
+HFC|Private Code|220|Н
+HFC|Indian Venus|280|Н
+HFC|Nirvanesque|210|Н
+HFC|Sword Dancer|210|Н
+HFC|Fly to Miracle|250|П
+HFC|Forbidden Whisper|300|Н|новинка||
+HFC|Diamond in the Sky|260|П
+HFC|Wear Love Everywhere|250|П
+HFC|Wrap Me in Dreams|280|Н
+HFC|Devil's Intrigue|430|П
+Hermetica|Rosefire|100|П
+Hermetica|Vaninight|100|Н
+Hermetica|Ivyme|100|Н
+Hermes|H24|120|Н
+Hermes|Barenia|150|Н
+Histoires de Parfums|This Is Not A Blue Bottle 1.5|140|Н
+Kajal|Lamar|140|Н
+Kajal|Dahab|160|П
+Hormone Paris|Gaba|250|П
+Hormone Paris|This Is Not Caffeine|240|Н|||гурманский
+Kilian|Liaisons Dangereuses, Typical Me|250|Н
+Kilian|Good Girl Gone Bad Eau Fraiche|330|НП
+Kilian|Good Girl Gone Bad|350|НП
+Kilian|Rolling in Love|300|Н
+Kilian|L'Heure Verte|310|Н|||зелёный
+Kilian|Angels' Share|350|Н
+Marc-Antoine Barrois|Ganymede|260|П
+Marc-Antoine Barrois|Tilia|300|НП
+Marc-Antoine Barrois|Encelade|240|Н
+Matiere Premiere|Parisian Musc|240|Н|||пудровый
+Miller et Bertaux|New Study|100|П
+Miller et Bertaux|#3 Green, Green|100|Н|||зелёный
+Moschino|Toy Boy|100
+M.INT|The Smart Set|180|П
+M.INT|Ten Strike|140|П
+M.INT|Azure Haze|160|Н
+Maison Noir|Vertigo 236|230|Н
+Maison Crivelli|Oud Maracuja|580|Н|||восточный
+Maison Margiela|Replica By the Fireplace|160|Н
+Maison Margiela|Replica Under the Lemon Trees|180|Н|||цитрусовый
+Masque Milano|Lost Alice|260|Н
+Milano Fragranze|Panettone|130|Н
+Milano Fragranze|Basilica|130|Н
+Max Philip|Cherry|130|П|||фруктовый
+Max Philip|Pink|140|НП
+Max Philip|Floral|150|Н
+Map of the Heart|Purple Heart V.5|150|Н
+Map of the Heart|Pink Heart V.6|180|Н
+Mancera|Fig Me Up|100|Н|||зелёный
+Mancera|Amberful|120|Н
+Mancera|Instant Crush|120|П
+Mancera|Red Tobacco|120|НП|||кожаный
+Mancera|Xplicit Vanilla|130|П|||гурманский
+Mancera|Cedrat Boise|120|П|||древесный
+Mancera|Amore Caffe|130|П|||гурманский
+Mancera|Feminity|120|П
+Mancera|Sicily|120|НП
+Mancera|Melody of the Sun|120|П
+Mancera|Hindu Kush|120|П
+Mancera|Cosmic Pepper|120|П
+Mancera|Lemon Line|120|П|||цитрусовый
+Memo|Inverness|250|Н
+Memo|Italian Leather|330|П|||кожаный
+Memo|African Leather|270|Н|||кожаный
+Memo|Marfa|300|П
+Montale|Bubble Forever|120|Н
+Montale|Dallachai|120|Н
+Montale|Oud Sapparot|120|Н|||восточный
+Montale|Arabians Tonka|120|П|||гурманский
+Montale|Oud Tobacco|120|П|||кожаный
+Montale|Intense Cafe|120|П|||гурманский
+Montale|Red Vetiver|120|Н|||древесный
+Montale|Infinity|120|П
+Montale|Vanilla Cake|110|П|||гурманский
+Nasomatto|Black Afgano Extrait|580
+Noran Perfumes|Arjan 1954 Red|80|П
+Noran Perfumes|Moon White|100|Н
+Nobile 1942|Rudis|200|Н
+Nobile 1942|Malia|220|Н
+Nobile 1942|La Danza delle Libellule|170|П
+The House of Oud|The Time|220|П
+The House of Oud|Up to the Moon|190|П
+The House of Oud|Empathy|240|П
+Thomas Kosmala|No 4 Apres l'Amour|140|П
+Thomas Kosmala|No 4 Neon|150|П
+Thomas Kosmala|No 10 Desir du Coeur|130|Н
+Thomas Kosmala|Star Chaser|190|П
+Theodoros Kalotinis|Pearl Gelato|220||||гурманский
+Trussardi|Donna Pink Marina|100|Н
+Trussardi|Donna|100|П
+Trussardi|Shopping Via della Spiga|180|Н
+Tom Ford|Ombre Leather|240|П|||кожаный
+Tom Ford|Eau d'Ombre Leather (2024)|230|Н|||кожаный
+Tom Ford|Soleil Neige (2025)|330|Н
+Paco Rabanne|Invictus|110|Н
+Paradis des Sens|Felicity|170|Н
+Patrice Martin|Miss Cherry|150|П|||фруктовый
+Patrice Martin|Wild Hibiscus|180|Н
+Parle Moi de Parfum|Orris Tattoo|220|П
+Parle Moi de Parfum|Milky Musk|220|П|||пудровый
+Parle Moi de Parfum|Orange Hyper Essence / X|220|П
+Parle Moi de Parfum|Chypre Mojo/45|210|П
+Parfums de Marly|Delina|370|П
+Parfums de Marly|Greenley|200|Н
+Parfums de Marly|Althair|260|П
+Parfums de Marly|Castley|190|Н
+Parfums de Marly|Layton|300|П
+Pierre Guillaume|Le Musc & La Peau 4.1|210|Н|||пудровый
+Premiere Note|Orange Calabria|100|П
+Penhaligon's|Vra Vra Vroom|280|Н
+Nicolai Parfumeur Createur|Riviera Verbena|180|Н
+Nicolai Parfumeur Createur|Pavlova|220|Н
+Serge Lutens|Parole d'Eau|140|Н
+Serge Lutens|Feminite du Bois|190|Н|||древесный
+Oscar de la Renta|Bella Blanca|100|Н
+Oscar de la Renta|Bella Essence|100|Н
+Orto Parisi|Terroni|350|П
+Orto Parisi|Megamare|390|П
+Orlov|Empower You|100|П
+Orlov|De Young Red|180|П
+Ormonde Jayne|Verano|280|П
+Ormonde Jayne|Champaca|250|П
+Osmassino|Black Leaf Kiss|180||новинка 2026||
+Osmassino|Eat Me Up|180|Н
+La Sultane de Saba|Voyage sur la Route des Epices|180|Н
+Les Liquides Imaginaires|Ame du Coeur|190|Н
+Les Liquides Imaginaires|Blanche Bete|270|Н
+Louis Vuitton|Imagination|600|П
+Laboratorio Olfattivo|Mandarino|150|Н
+Lattafa|Yara|100|П
+Lattafa|Pink to Pink|100|П
+Lattafa|Khamrah|100|П
+Lalique|Encre Noire|80|П
+Lalique|Amethyst|80|НП
+Laurent Mazzone|Chemise Blanche|180|П
+Laurent Mazzone|Dulce Pear|200|Н|||фруктовый
+Laurent Mazzone|Sensual Orchid|230|П|||цветочный
+Loewe|001 Man|130|Н
+Le Labo|Another 13|370|Н
+Rochas|Mademoiselle Rochas|100|Н
+Roja|Elysium Pour Homme Eau Intense|250|Н
+Roja|Elysium Pour Homme|300|П
+Richard|White Chocola|220|П
+Rosendo Mateu|No 5|180|П
+RudRoss|Vanilla Love|150|П|||гурманский
+RudRoss|Mira|120|Н
+RudRoss|Lust for Life|130|Н
+Sud Pacifique|O'Pomelo|60|П
+Voyage Royal|Dracula|60|Н
+Vilhelm Parfumerie|Smoke Show|220|Н
+Vilhelm Parfumerie|Chimilka|280|Н
+Vilhelm Parfumerie|Morning Chess|250|П
+Vilhelm Parfumerie|Dear Polly|250|П
+Vilhelm Parfumerie|Sparkling Jo|260|П
+Vilhelm Parfumerie|Room Service|260|П
+Vilhelm Parfumerie|Mango Skin|260|П|||фруктовый
+Vilhelm Parfumerie|Basilico & Fellini|240|Н
+Vertus|Narcos'is|160|Н
+Versace|Eros Energy|100|Н
+Versace|Atelier Versace Figue Blanche|230
+Veronique Gabai|Mimosa in the Air|190|Н|||цветочный
+Voskanian Parfums|Cocktail de Minuit|380|Н
+Voronoi|Cassis Vert|170|Н|российская ниша||фруктовый
+What We Do Is Secret|Messy Sexy Just Rolled Out of Bed|230|Н
+Roos & Roos|Pale Blue Eyes|150|П
+Xerjoff|Torino 21|260|П
+Xerjoff|Torino 24|250|П
+Casamorati|Mefisto|210|П
+Casamorati|Dama Bianca|250|П
+Casamorati|Gran Ballo|190|Н
+Casamorati|Lira|250|П
+Zadig & Voltaire|This Is Him!|100|Н
+Zadig & Voltaire|This Is Her!|100|Н
+Zarkoperfume|Purple Molecule 070.07|140|Н
+Zarkoperfume|Pink Molecule 090.09|140|НП
+Zarkoperfume|Cloud Collection No 1|150|Н
+Zarkoperfume|The Muse|140|Н
+Zarkoperfume|Molecule 234.38|120|П
+Zarkoperfume|Carate Urio|130|Н
+Zielinski & Rozen|Pink Pepper, Elemi, Cinnamon|240|Н
+Yves Saint Laurent|Black Opium|180|П

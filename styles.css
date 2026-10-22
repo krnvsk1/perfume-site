@@ -3,7 +3,7 @@
   --bg:#ECEBF1; --surface:#F8F7FB; --fg:#251C30; --muted:#6C6378; --line:#D6D2DF;
   --accent:#6E3F84; --accent-fg:#FFFFFF; --gold:#A07C3E; --warn:#B4552E;
   --glass:rgba(255,255,255,.55);
-  --display:"Marcellus", Georgia, serif;
+  --display:"Forum", Georgia, serif;
   --body:"Manrope", system-ui, sans-serif;
   --mono:"JetBrains Mono", ui-monospace, monospace;
 }
@@ -42,11 +42,6 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 @media (max-height:760px){.o-stage{height:190px}.o-stage .bottle{transform:scale(1.15)}}
 @media (prefers-reduced-motion:reduce){.card.is-open,.veil{transition:none}.card.is-open:hover{transform:none}}
 .bottle{position:relative;width:78px;height:130px}
-.cap{position:absolute;left:50%;top:0;width:30px;height:26px;transform:translateX(-50%);background:var(--gold);border-radius:4px 4px 2px 2px}
-.neck{position:absolute;left:50%;top:24px;width:16px;height:10px;transform:translateX(-50%);background:var(--line)}
-.flask{position:absolute;inset:32px 0 0;border:2px solid var(--line);border-radius:16px 16px 12px 12px;overflow:hidden;background:var(--glass)}
-.liquid{position:absolute;left:0;right:0;bottom:0;transition:height .6s ease;opacity:.85}
-.liquid::after{content:"";position:absolute;inset:0 0 auto;height:3px;background:rgba(255,255,255,.45)}
 .house{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .name{font:400 24px/1.15 var(--display);margin:2px 0 0}
 .notes{color:var(--muted);font-size:13.5px;margin:0}
@@ -125,7 +120,6 @@ select{font:600 14px var(--body);color:var(--fg);background:var(--surface);borde
 a.btn{text-decoration:none;display:inline-block}
 /* админка: список ароматов */
 .thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--bg);border:1px solid var(--line)}
-@media (prefers-reduced-motion:reduce){.liquid{transition:none}}
 
 /* шапка, кнопка корзины */
 .hero-top{display:flex;justify-content:space-between;align-items:start;gap:16px}
@@ -326,11 +320,61 @@ textarea{resize:vertical}
 .cookie .btn{flex:0 0 auto}
 .total b{white-space:nowrap}
 .total>span{min-width:0}
-.flask{border-color:color-mix(in srgb,var(--fg) 22%,transparent)}
-.neck{background:color-mix(in srgb,var(--fg) 22%,transparent)}
 /* полёт флакона в корзину */
 .fly{position:fixed;z-index:40;pointer-events:none;will-change:transform}
 .fly-in{width:100%;height:100%;display:grid;place-items:center;transform-origin:50% 50%;will-change:transform,opacity;
   filter:drop-shadow(0 10px 14px rgba(30,20,40,.25))}
 .fly-in .bottle{transform:none}
 .cart-btn.bump{animation:bump .45s cubic-bezier(.3,1.6,.5,1)}
+
+/* флаконы-силуэты и семейства */
+:root{--bottle-line:color-mix(in srgb,var(--fg) 22%,transparent)}
+.bottle svg{display:block;width:100%;height:100%;overflow:visible}
+.b-glass{fill:var(--glass)}
+.b-edge{fill:none;stroke:var(--bottle-line);stroke-width:2}
+.b-neck{fill:var(--bottle-line)}
+.b-cap{fill:var(--gold)}
+.fam{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--muted);margin-top:-6px}
+.fam i{width:10px;height:10px;border-radius:50%;flex:0 0 10px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.famrow{padding-top:14px}
+.famrow button{display:inline-flex;align-items:center;gap:7px;border-style:solid}
+.famrow button i{width:10px;height:10px;border-radius:50%}
+.famrow button .mini{background:var(--bg);color:var(--muted);margin-left:0}
+.famrow+.tagrow{padding-top:8px}
+.o-tags .fam{margin:0 4px 0 0;background:none;padding:2px 0}
+/* монограмма */
+.brand{display:flex;align-items:center;gap:18px}
+.mark{flex:0 0 auto;width:54px;height:64px;color:var(--gold)}
+.adm .mark{width:44px;height:52px}
+@media (max-width:560px){.brand{gap:12px}.mark{width:42px;height:50px}}
+/* компактный каталог на телефоне */
+.countbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px}
+.countbar .count{margin:0}
+.viewsw{display:none;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.viewsw button{display:grid;place-items:center;width:34px;height:30px;border:0;border-radius:7px;background:none;color:var(--muted);cursor:pointer}
+.viewsw button svg{fill:currentColor}
+.viewsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+@media (max-width:560px){
+  .viewsw{display:flex}
+  .grid.compact{grid-template-columns:1fr 1fr;gap:10px}
+  .compact .card{padding:10px 10px 12px;gap:7px;border-radius:12px}
+  .compact .stage{height:132px;border-radius:8px}
+  .compact .stage .bottle{transform:scale(.8)}
+  .compact .photo{inset:6px;width:calc(100% - 12px);height:calc(100% - 12px)}
+  .compact .fav{width:30px;height:30px;font-size:15px;top:5px;right:5px}
+  .compact .tag{font-size:9px;padding:2px 6px;top:6px;left:6px;letter-spacing:.04em}
+  .compact .house{font-size:9.5px;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .compact .name{font-size:18px;line-height:1.15;margin-top:1px}
+  .compact .notes,.compact .locs,.compact .gauge{display:none}
+  .compact .left{font-size:11px}
+  .compact .fam{font-size:11px;gap:5px;margin-top:-3px}
+  .compact .fam i{width:8px;height:8px;flex-basis:8px}
+  .compact .prices{margin-top:auto;padding-top:8px;gap:4px}
+  .compact .prices b{font-size:14px}
+  .compact .prices span{font-size:10.5px}
+  .compact .btn[data-buy]{padding:9px 6px;font-size:13px;border-radius:9px}
+}
+button,select{font-family:inherit}
+@media (min-width:561px){.famrow,.famrow+.tagrow{flex-wrap:wrap;overflow:visible;-webkit-mask-image:none}}
+.o-stage .bottle{transform:scale(1.32) translateY(6px)}
+@media (max-height:760px){.o-stage .bottle{transform:scale(1.05) translateY(4px)}}

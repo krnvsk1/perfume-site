@@ -21,6 +21,7 @@ create table if not exists perfumes (
 -- поля, добавленные позже (скрипт можно запускать на уже созданной базе)
 alter table perfumes add column if not exists is_new boolean not null default false; -- метка «Новинка»
 alter table perfumes add column if not exists tags text[] not null default '{}';    -- ноты и тип: древесный, цветочный, унисекс…
+alter table perfumes add column if not exists family text;                          -- семейство: цвет флакона и фильтр на витрине
 -- старые пометки «новинка 2026» в описании превращаем в флаг
 update perfumes set is_new = true,
   description = nullif(trim(regexp_replace(description, 'новинка\s*\d*', '', 'i')), '')

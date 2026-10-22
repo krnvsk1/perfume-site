@@ -37,7 +37,7 @@
    "openingHours":"Mo-Su 12:00-20:00"}]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
     <div class="hero-top">
       <div>
         <div class="badge" id="demoBadge" hidden>Демо-режим</div>
-        <h1 id="shopName">Парфюмерная Комната</h1>
+        <div class="brand"><svg class="mark" viewBox="0 0 64 76" aria-hidden="true"><path d="M7 74V31a25 25 0 0 1 50 0v43" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M13 74V32a19 19 0 0 1 38 0v42" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/><path d="M32 2l3.2 3.2L32 8.4l-3.2-3.2z" fill="currentColor"/><text x="32" y="60" text-anchor="middle" font-family="Forum, Georgia, serif" font-size="25" fill="var(--fg)" letter-spacing=".5">ПК</text></svg><h1 id="shopName">Парфюмерная Комната</h1></div>
         <p class="sub" id="tagline"></p>
       </div>
       <button class="btn ghost small" id="accountBtn" type="button">Войти</button>
@@ -74,8 +74,15 @@
     </label>
     <button class="btn cart-btn" id="cartBtn" type="button">Корзина <span class="cnt" id="cartCount" hidden>0</span></button>
   </div>
+  <div class="tagrow famrow" id="famRow" role="group" aria-label="Семейство аромата" hidden></div>
   <div class="tagrow" id="tagRow" role="group" aria-label="Ноты и тип" hidden></div>
-  <p class="count" id="count" aria-live="polite"></p>
+  <div class="countbar">
+    <p class="count" id="count" aria-live="polite"></p>
+    <div class="viewsw" id="viewSw" role="group" aria-label="Вид каталога">
+      <button type="button" data-v="compact" aria-label="Две колонки"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1.6"/><rect x="11" y="2" width="7" height="7" rx="1.6"/><rect x="2" y="11" width="7" height="7" rx="1.6"/><rect x="11" y="11" width="7" height="7" rx="1.6"/></svg></button>
+      <button type="button" data-v="large" aria-label="Крупные карточки"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="3" y="2" width="14" height="16" rx="2"/></svg></button>
+    </div>
+  </div>
 
   <main><div class="grid" id="grid"><p class="empty">Загружаю ароматы…</p></div>
     <div class="more" id="more" hidden><span class="notes">Загружаю ещё…</span></div></main>
@@ -202,7 +209,7 @@ const $ = id => document.getElementById(id);
 const SHOP = APP_CONFIG.SHOP || {};
 const LOCS = SHOP.locations || {};
 const calm = matchMedia("(prefers-reduced-motion: reduce)");
-let items = [], cur = null, full = false, filter = "all", tag = "", me = null;
+let items = [], cur = null, full = false, filter = "all", tag = "", fam = "", me = null;
 const LS = {
   get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -253,11 +260,36 @@ function toggleFav(id) {
 }
 function drawFavCount() { const n = [...favs].filter(id => byId(id)).length; $("favCount").textContent = n; $("favCount").hidden = !n; }
 
+// ---------- флакон без фото: один из шести силуэтов, цвет по семейству, уровень по остатку ----------
+const famOf = p => FAMILIES[(p.family || "").toLowerCase()] || null;
+const famColor = p => (famOf(p) || {}).color || NO_FAMILY_COLOR;
+// скруглённый прямоугольник как путь (нужен для обрезки «жидкости» по форме стекла)
+const rr = (x, y, w, h, r) => `M${x + r} ${y}H${x + w - r}Q${x + w} ${y} ${x + w} ${y + r}V${y + h - r}Q${x + w} ${y + h} ${x + w - r} ${y + h}H${x + r}Q${x} ${y + h} ${x} ${y + h - r}V${y + r}Q${x} ${y} ${x + r} ${y}Z`;
+// холст 78×130; top/bottom — где у стекла верх и низ, чтобы посчитать уровень
+const SHAPES = [
+  { cap: rr(27, 0, 24, 22, 3), neck: rr(32, 21, 14, 9, 1), body: rr(4, 29, 70, 99, 14), top: 29, left: 4 },        // классический
+  { cap: rr(29, 4, 20, 20, 3), neck: rr(33, 23, 12, 10, 1), body: "M3 85a36 43 0 1 0 72 0a36 43 0 1 0 -72 0Z", top: 42, left: 3 }, // круглый
+  { cap: rr(30, 0, 18, 26, 3), neck: rr(34, 25, 10, 8, 1), body: rr(15, 32, 48, 96, 8), top: 32, left: 15 },       // высокий
+  { cap: rr(22, 22, 34, 22, 6), neck: rr(31, 43, 16, 6, 1), body: rr(2, 48, 74, 80, 20), top: 48, left: 2 },       // приземистый
+  { cap: rr(28, 0, 22, 22, 3), neck: rr(33, 21, 12, 9, 1), body: "M18 30H60Q64 30 65 34L75 119Q76 128 67 128H11Q2 128 3 119L13 34Q14 30 18 30Z", top: 30, left: 10 }, // трапеция
+  { cap: "M24 16a15 15 0 1 0 30 0a15 15 0 1 0 -30 0Z", neck: rr(33, 29, 12, 7, 1), body: rr(8, 35, 62, 93, 6), top: 35, left: 8 } // крышка-шар
+];
+const hashStr = s => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 function bottle(p, lazy = true) {
   if (p.photo_url) return `<img class="photo" src="${esc(p.photo_url)}" alt="${esc(title(p))}"${lazy ? ' loading="lazy"' : ""}>`;
   const pct = p.ml_left != null && p.bottle_volume ? Math.max(0, Math.min(100, p.ml_left / p.bottle_volume * 100)) : 70;
-  return `<div class="bottle" aria-hidden="true"><div class="cap"></div><div class="neck"></div><div class="flask"><div class="liquid" style="height:${pct}%;background:${esc(p.color || "#6E3F84")}"></div></div></div>`;
+  const k = hashStr(p.house + "|" + p.name) % SHAPES.length, s = SHAPES[k];
+  const y = Math.round(128 - (128 - s.top) * pct / 100);
+  return `<div class="bottle" aria-hidden="true"><svg viewBox="0 0 78 130" width="78" height="130">
+    <defs><clipPath id="bc${k}"><path d="${s.body}"/></clipPath></defs>
+    <path d="${s.body}" class="b-glass"/>
+    <g clip-path="url(#bc${k})"><rect x="0" y="${y}" width="78" height="${130 - y}" fill="${esc(famColor(p))}" opacity=".88"/>
+      <rect x="0" y="${y}" width="78" height="2.5" fill="#fff" opacity=".45"/>
+      <rect x="${s.left + 7}" y="${s.top + 9}" width="4" height="${Math.max(10, 128 - s.top - 26)}" rx="2" fill="#fff" opacity=".35"/></g>
+    <path d="${s.body}" class="b-edge"/>
+    <path d="${s.neck}" class="b-neck"/><path d="${s.cap}" class="b-cap"/></svg></div>`;
 }
+const famChip = p => { const f = famOf(p); return f ? `<span class="fam"><i style="background:${esc(f.color)}"></i>${esc(f.label)}</span>` : ""; };
 function stock(p) {
   if (p.ml_left == null) return "";
   if (p.ml_left <= 0) return `<div class="left sold">Закончился</div>`;
@@ -273,6 +305,7 @@ function card(p) {
     <div class="stage${p.photo_url ? " has-photo" : ""}">${bottle(p)}${isNew(p) ? `<span class="tag">Новинка</span>` : ""}
       <button class="fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav ? "Убрать из избранного" : "В избранное"}">${fav ? "♥" : "♡"}</button></div>
     <div><div class="house">${esc(p.house)}</div><h3 class="name">${out ? esc(p.name) : `<a href="#${esc(slugOf(p))}" tabindex="-1">${esc(p.name)}</a>`}</h3></div>
+    ${famChip(p)}
     <p class="notes">${esc(descOf(p))}</p>
     ${stock(p)}
     <div class="locs">${locBadges(p.location)}</div>
@@ -282,6 +315,22 @@ function card(p) {
   </article>`;
 }
 const norm = s => String(s || "").toLowerCase().replace(/[’'`]/g, "'").replace(/ё/g, "е");
+// ---------- вид каталога на телефоне: две колонки (по умолчанию) или крупные карточки ----------
+let viewMode = LS.get("perfume-view", "compact");
+function applyView() {
+  $("grid").classList.toggle("compact", viewMode === "compact");
+  $("viewSw").querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === viewMode));
+}
+$("viewSw").addEventListener("click", e => {
+  const b = e.target.closest("[data-v]"); if (!b || b.dataset.v === viewMode) return;
+  // держим в поле зрения ту же карточку, что была сверху, чтобы смена вида не уносила прокрутку
+  const first = [...$("grid").children].find(c => c.getBoundingClientRect().bottom > 120);
+  viewMode = b.dataset.v; LS.set("perfume-view", viewMode); applyView();
+  if (first && scrollY > 300) first.scrollIntoView({ block: "start" }), scrollBy(0, -130);
+  queueFill();
+});
+applyView();
+
 // карточки рисуются порциями: сначала 36, остальные по мере прокрутки
 const STEP = 36;
 let view = [], shown = 0;
@@ -290,11 +339,12 @@ function passes(p) {
   if (filter === "fav" && !favs.has(String(p.id))) return false;
   if (filter === "Н" || filter === "П") { if (!(p.location || "").includes(filter)) return false; }
   if (tag && !tagsOf(p).includes(tag)) return false;
+  if (fam && (p.family || "").toLowerCase() !== fam) return false;
   return true;
 }
 function draw(keep) {
   const q = norm($("q").value.trim());
-  let list = items.filter(p => (!q || norm(title(p) + " " + tagsOf(p).join(" ")).includes(q)) && passes(p));
+  let list = items.filter(p => (!q || norm(title(p) + " " + tagsOf(p).join(" ") + " " + ((famOf(p) || {}).label || "")).includes(q)) && passes(p));
   const s = $("sort").value;
   if (s === "cheap") list = list.slice().sort((a, b) => a.price_per_ml - b.price_per_ml);
   if (s === "dear") list = list.slice().sort((a, b) => b.price_per_ml - a.price_per_ml);
@@ -328,6 +378,21 @@ function refreshCard(id) {
   const el = $("grid").querySelector(`.card[data-id="${CSS.escape(String(id))}"]`), p = byId(id);
   if (el && p) el.outerHTML = card(p);
 }
+function drawFams() {
+  const count = {};
+  items.forEach(p => { const k = (p.family || "").toLowerCase(); if (FAMILIES[k]) count[k] = (count[k] || 0) + 1; });
+  const list = Object.keys(FAMILIES).filter(k => count[k]);
+  $("famRow").hidden = !list.length;
+  if (fam && !count[fam]) fam = "";
+  $("famRow").innerHTML = list.length ? `<button type="button" data-fam="" aria-pressed="${!fam}">Все семейства</button>` +
+    list.map(k => `<button type="button" data-fam="${esc(k)}" aria-pressed="${k === fam}"><i style="background:${FAMILIES[k].color}"></i>${esc(FAMILIES[k].label)} <span class="mini">${count[k]}</span></button>`).join("") : "";
+}
+$("famRow").addEventListener("click", e => {
+  const b = e.target.closest("[data-fam]"); if (!b) return;
+  fam = b.dataset.fam;
+  $("famRow").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  draw();
+});
 function drawTags() {
   const count = {};
   items.forEach(p => tagsOf(p).forEach(t => count[t] = (count[t] || 0) + 1));
@@ -347,7 +412,7 @@ async function load() {
   try { items = await Store.list(); }
   catch (e) { $("grid").innerHTML = `<p class="empty">Не удалось загрузить каталог: ${esc(e.message)}</p>`; return; }
   cart = cart.filter(l => items.some(p => String(p.id) === l.perfume_id));
-  saveCart(); drawTags(); drawFavCount(); draw(loaded); loaded = true; seoCatalog();
+  saveCart(); drawFams(); drawTags(); drawFavCount(); draw(loaded); loaded = true; seoCatalog();
   if (!$("dVeil").hidden && !$("v-cart").hidden) drawCart();
   openFromHash();
 }
@@ -606,7 +671,7 @@ function openProduct(id, cardEl) {
   $("o-stage").innerHTML = bottle(cur, false);
   $("o-house").textContent = cur.house || ""; $("o-name").textContent = cur.name;
   $("o-desc").textContent = descOf(cur); $("o-desc").hidden = !descOf(cur);
-  $("o-tags").innerHTML = tagsOf(cur).map(t => `<span>${esc(t)}</span>`).join(""); $("o-tags").hidden = !tagsOf(cur).length;
+  $("o-tags").innerHTML = famChip(cur) + tagsOf(cur).map(t => `<span>${esc(t)}</span>`).join(""); $("o-tags").hidden = !tagsOf(cur).length && !famOf(cur);
   drawSheetFav(); drawRelated();
   history.replaceState(null, "", "#" + slugOf(cur));
   track("open", { perfume: title(cur) });
