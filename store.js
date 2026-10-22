@@ -211,6 +211,8 @@
 
   window.compressImage = compressImage;
   window.STATUS = { new: "Принят", ready: "Готов к выдаче", done: "Выдан", cancelled: "Отменён" };
+  // +79615848384 → +7 (961) 584-83-84
+  window.fmtPhone = ph => { const d = String(ph || "").replace(/\D/g, ""); return d.length === 11 && d[0] === "7" ? `+7 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7, 9)}-${d.slice(9)}` : ph || ""; };
   window.fmtMoney = n => new Intl.NumberFormat("ru-RU").format(Math.round(n)) + " " + (cfg.CURRENCY || "₽");
   window.fmtDate = d => new Date(d).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   window.esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
