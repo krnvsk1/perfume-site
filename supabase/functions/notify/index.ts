@@ -2,13 +2,17 @@
 // Секреты (Edge Functions → Secrets): TG_TOKEN — токен бота от @BotFather, TG_CHAT — твой chat id (узнать у @userinfobot).
 // Вызов: Database → Webhooks → новый вебхук на INSERT в таблицу orders → Supabase Edge Function "notify".
 
+type Line = { name: string; ml: number; full_bottle: boolean; price: number };
+const rub = (n: number) => new Intl.NumberFormat("ru-RU").format(Math.round(n)) + " ₽";
+
 Deno.serve(async (req) => {
   const { record: r } = await req.json();
-  const money = new Intl.NumberFormat("ru-RU").format(Math.round(r.total)) + " ₽";
+  const lines = (r.items as Line[]).map((l) => `• ${l.name} — ${l.full_bottle ? "флакон" : l.ml + " мл"}, ${rub(l.price)}`);
   const text = [
-    "🛍 Новая заявка",
-    r.perfume_name,
-    `${r.full_bottle ? "Флакон" : r.ml + " мл"} — ${money}`,
+    `🛍 Заказ №${r.number}`,
+    ...lines,
+    `Итого: ${rub(r.total)}`,
+    "",
     r.customer_name,
     r.phone,
   ].join("\n");

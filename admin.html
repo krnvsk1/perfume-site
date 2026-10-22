@@ -101,7 +101,7 @@ async function boot() {
 $("loginView").addEventListener("submit", async e => {
   e.preventDefault();
   const err = await Store.signIn($("l-email").value.trim(), $("l-pass").value);
-  if (err) { $("l-err").textContent = "Неверная почта или пароль."; return; }
+  if (err) { $("l-err").textContent = err; return; }
   boot();
 });
 $("logout").onclick = async () => { await Store.signOut(); boot(); };
@@ -131,12 +131,22 @@ async function refresh() {
     const [items, orders] = await Promise.all([Store.list({ all: true }), Store.orders()]);
     all = items; drawItems();
     $("orders").innerHTML = orders.length ? orders.map(o => `
-      <div class="order"><div class="t">${new Date(o.created_at).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</div>
-      <b>${esc(o.perfume_name)}</b> · ${o.full_bottle ? "флакон" : o.ml + " мл"} · ${fmtMoney(o.total)}<br>${esc(o.customer_name)}, ${esc(o.phone)}</div>`).join("")
-      : `<p class="notes">Заявок пока нет.</p>`;
+      <div class="order" data-oid="${esc(o.id)}">
+        <div class="morder-head"><b>№${o.number} · ${fmtMoney(o.total)}</b>
+          <select data-status aria-label="Статус заказа">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}"${k === o.status ? " selected" : ""}>${v}</option>`).join("")}</select></div>
+        <div class="t">${fmtDate(o.created_at)}</div>
+        ${o.items.map(i => `<div>${esc(i.name)} · ${i.full_bottle ? "флакон" : i.ml + " мл"} · ${fmtMoney(i.price)}</div>`).join("")}
+        <div class="notes">${esc(o.customer_name)}, ${esc(o.phone)}</div>
+      </div>`).join("")
+      : `<p class="notes">Заказов пока нет.</p>`;
   } catch (e) { toast("Ошибка загрузки: " + e.message); }
 }
 
+$("orders").addEventListener("change", async e => {
+  if (!e.target.matches("[data-status]")) return;
+  try { await Store.setStatus(e.target.closest(".order").dataset.oid, e.target.value); toast("Статус: " + STATUS[e.target.value]); }
+  catch (err) { toast("Не получилось сменить статус: " + err.message); }
+});
 $("items").addEventListener("change", async e => {
   if (!e.target.matches("[data-photo]") || !e.target.files[0]) return;
   const id = e.target.closest(".item").dataset.id;
