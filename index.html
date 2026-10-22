@@ -117,7 +117,12 @@ const locBadges = loc => [...(loc || "")].filter(k => LOCS[k]).map(k =>
 const isNew = p => /новинка/i.test(p.description || "");
 
 function bottle(p) {
-  if (p.photo_url) return `<img src="${esc(p.photo_url)}" alt="${esc(p.house + " " + p.name)}" loading="lazy">`;
+  if (p.photo_url) return `
+    <span class="floor" aria-hidden="true"></span>
+    <div class="float"><div class="obj">
+      <img src="${esc(p.photo_url)}" alt="${esc(p.house + " " + p.name)}" loading="lazy">
+      <span class="shine" style="--m:url('${esc(p.photo_url)}')" aria-hidden="true"></span>
+    </div></div>`;
   const pct = p.ml_left != null && p.bottle_volume ? Math.max(0, Math.min(100, p.ml_left / p.bottle_volume * 100)) : 70;
   return `<div class="bottle" aria-hidden="true"><div class="cap"></div><div class="neck"></div><div class="flask"><div class="liquid" style="height:${pct}%;background:${esc(p.color || "#6E3F84")}"></div></div></div>`;
 }
@@ -168,6 +173,37 @@ $("chips").addEventListener("click", e => {
   $("chips").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
   draw();
 });
+
+// ---- объёмный флакон: поворот за курсором или пальцем, наклон телефона
+function tiltTo(stage, x, y) { // x, y от -1 до 1
+  stage.style.setProperty("--ry", (x * 26).toFixed(1) + "deg");
+  stage.style.setProperty("--rx", (-y * 14).toFixed(1) + "deg");
+  stage.style.setProperty("--sx", (50 - x * 45).toFixed(0) + "%");
+  stage.style.setProperty("--fx", (x * 14).toFixed(0) + "px");
+}
+function untilt(stage) { ["--ry", "--rx", "--sx", "--fx"].forEach(v => stage.style.removeProperty(v)); stage.classList.remove("is-tilting"); }
+$("grid").addEventListener("pointermove", e => {
+  const stage = e.target.closest(".stage.has-photo"); if (!stage) return;
+  const r = stage.getBoundingClientRect();
+  stage.classList.add("is-tilting");
+  tiltTo(stage, ((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1);
+});
+$("grid").addEventListener("pointerout", e => {
+  const stage = e.target.closest(".stage.has-photo");
+  if (stage && !stage.contains(e.relatedTarget)) untilt(stage);
+});
+// на телефонах без запроса разрешения (Android) флаконы поворачиваются при наклоне
+if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== "function" && matchMedia("(pointer: coarse)").matches) {
+  let raf = 0;
+  addEventListener("deviceorientation", e => {
+    if (e.gamma == null || raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const x = Math.max(-1, Math.min(1, e.gamma / 30)), y = Math.max(-1, Math.min(1, (e.beta - 45) / 40));
+      document.querySelectorAll(".stage.has-photo").forEach(s => tiltTo(s, x, y));
+    });
+  });
+}
 
 // ---- заказ
 function openOrder(id) {

@@ -24,8 +24,30 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;margin-top:28px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .stage{height:200px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 85%,var(--glass),transparent 60%);border-radius:10px;overflow:hidden}
-.stage img{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain}
-.stage.has-photo{background:#FFFFFF}
+/* объёмный флакон с фото: перспектива, поворот, блик, тень и отражение */
+.stage.has-photo{perspective:700px;background:
+  radial-gradient(ellipse 60% 30% at 50% 88%,var(--glass),transparent 70%),
+  linear-gradient(180deg,var(--surface),var(--bg));touch-action:pan-y}
+.float{position:absolute;inset:0;display:grid;justify-items:center;transform-style:preserve-3d;animation:bob 5s ease-in-out infinite}
+.obj{position:relative;height:138px;margin-top:14px;transform-style:preserve-3d;
+  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,-10deg)) translateZ(10px);
+  transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.is-tilting .obj{transition:transform .12s ease-out}
+.obj img{display:block;height:100%;width:auto;
+  filter:drop-shadow(0 10px 12px rgba(30,20,40,.18)) drop-shadow(0 2px 3px rgba(30,20,40,.12));
+  -webkit-box-reflect:below 4px linear-gradient(transparent 78%,rgba(255,255,255,.22))}
+.shine{position:absolute;inset:0;pointer-events:none;
+  -webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;
+  background:linear-gradient(100deg,rgba(40,25,50,.16) 0%,transparent 30%,rgba(255,255,255,.75) 48%,transparent 62%,rgba(40,25,50,.2) 100%);
+  background-size:260% 100%;background-position:var(--sx,62%) 0;
+  transition:background-position .6s cubic-bezier(.2,.8,.2,1);mix-blend-mode:soft-light}
+.is-tilting .shine{transition:background-position .12s ease-out}
+.floor{position:absolute;left:50%;bottom:26px;width:74px;height:12px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(30,20,40,.28),transparent);
+  transform:translateX(calc(-50% + var(--fx,4px)));transition:transform .6s cubic-bezier(.2,.8,.2,1);animation:shadow 5s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes shadow{50%{opacity:.6;scale:.9 1}}
+@media (prefers-reduced-motion:reduce){.float,.floor{animation:none}.obj,.shine,.floor{transition:none}}
 .bottle{position:relative;width:78px;height:130px}
 .cap{position:absolute;left:50%;top:0;width:30px;height:26px;transform:translateX(-50%);background:var(--gold);border-radius:4px 4px 2px 2px}
 .neck{position:absolute;left:50%;top:24px;width:16px;height:10px;transform:translateX(-50%);background:var(--line)}
