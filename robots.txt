@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin.html
+Allow: /
+
+# после публикации раскомментируй и впиши свой адрес:
+# Sitemap: https://ТВОЙ-АДРЕС/sitemap.xml

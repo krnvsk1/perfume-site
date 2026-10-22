@@ -4,7 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Парфюмерная Комната</title>
-<meta name="description" content="Распив оригинальной парфюмерии в Краснодаре: любой аромат от 2 мл, атомайзер в подарок.">
+<meta name="description" content="Распив оригинальной парфюмерии в Краснодаре: любой аромат от 2 мл, атомайзер входит в стоимость.">
+<meta name="theme-color" content="#ECEBF1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17131C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<!-- превью ссылки в мессенджерах и соцсетях; после публикации замени адрес на свой (см. README) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Парфюмерная Комната">
+<meta property="og:title" content="Парфюмерная Комната — распив оригинальной парфюмерии в Краснодаре">
+<meta property="og:description" content="Более 300 ароматов на распив от 2 мл и целыми флаконами. Атомайзер входит в стоимость, можно потестить на Народной и на Жлобы.">
+<meta property="og:image" content="images/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- для поисковиков: магазин, адреса, телефон -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Store","name":"Парфюмерная Комната",
+ "description":"Распив оригинальной парфюмерии в Краснодаре",
+ "telephone":"+7 961 584-83-84","priceRange":"₽₽","currenciesAccepted":"RUB",
+ "image":"images/og.jpg",
+ "sameAs":["https://t.me/irinaparfkrd","https://vk.ru/club212986895"],
+ "department":[
+  {"@type":"Store","name":"Офис на Народной","telephone":"+7 961 584-83-84",
+   "address":{"@type":"PostalAddress","streetAddress":"ул. Народная, 68А, кабинет 102","addressLocality":"Краснодар","addressCountry":"RU"},
+   "geo":{"@type":"GeoCoordinates","latitude":45.1068173,"longitude":38.9388418},
+   "openingHours":"Mo,Tu,Th,Sa,Su 12:00-20:00"},
+  {"@type":"Store","name":"Магазин в ЖК «Панорама»","telephone":"+7 961 584-83-84",
+   "address":{"@type":"PostalAddress","streetAddress":"ул. Жлобы, 139","addressLocality":"Краснодар","addressCountry":"RU"},
+   "geo":{"@type":"GeoCoordinates","latitude":45.0458478,"longitude":39.0308008},
+   "openingHours":"Mo-Su 12:00-20:00"}]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="styles.css">
@@ -152,6 +183,10 @@
   </aside>
 </div>
 <div class="toast" id="toast" hidden></div>
+<div class="cookie" id="cookie" hidden role="region" aria-label="Уведомление о cookie">
+  <span>Мы используем cookie и Яндекс Метрику, чтобы понимать, как улучшить сайт. <a href="privacy.html">Подробнее</a></span>
+  <button class="btn small" type="button" id="cookieOk">Понятно</button>
+</div>
 
 <script src="config.js"></script>
 <script>
@@ -311,11 +346,35 @@ async function load() {
   try { items = await Store.list(); }
   catch (e) { $("grid").innerHTML = `<p class="empty">Не удалось загрузить каталог: ${esc(e.message)}</p>`; return; }
   cart = cart.filter(l => items.some(p => String(p.id) === l.perfume_id));
-  saveCart(); drawTags(); drawFavCount(); draw(loaded); loaded = true;
+  saveCart(); drawTags(); drawFavCount(); draw(loaded); loaded = true; seoCatalog();
   if (!$("dVeil").hidden && !$("v-cart").hidden) drawCart();
   openFromHash();
 }
 let loaded = false;
+
+// ---------- разметка для поисковиков: список ароматов с ценой за 1 мл ----------
+function seoCatalog() {
+  let el = document.getElementById("ld-catalog");
+  if (!el) { el = document.createElement("script"); el.type = "application/ld+json"; el.id = "ld-catalog"; document.head.append(el); }
+  const base = location.href.split("#")[0];
+  el.textContent = JSON.stringify({
+    "@context": "https://schema.org", "@type": "ItemList", name: "Ароматы на распив",
+    itemListElement: items.map((p, i) => ({
+      "@type": "ListItem", position: i + 1,
+      item: {
+        "@type": "Product", name: title(p), brand: { "@type": "Brand", name: p.house }, url: base + "#" + slugOf(p),
+        ...(descOf(p) ? { description: descOf(p) } : {}),
+        ...(p.photo_url ? { image: new URL(p.photo_url, base).href } : {}),
+        offers: {
+          "@type": "Offer", priceCurrency: "RUB", price: (p.min_ml || 2) * p.price_per_ml,
+          availability: p.ml_left != null && p.ml_left < (p.min_ml || 1) ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+          priceSpecification: { "@type": "UnitPriceSpecification", price: p.price_per_ml, priceCurrency: "RUB",
+            referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MLT" } }
+        }
+      }
+    }))
+  });
+}
 let qt; $("q").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(draw, 120); });
 $("sort").onchange = draw;
 $("chips").addEventListener("click", e => {
@@ -655,7 +714,16 @@ $("orderForm").addEventListener("submit", e => {
   toast(`${title(cur)} в корзине`);
 });
 
-// Яндекс Метрика: цели «открыл аромат», «в корзину», «заказ» (если указан METRIKA_ID)
+// ---------- Яндекс Метрика (подключается, только если в config.js указан METRIKA_ID) ----------
+if (APP_CONFIG.METRIKA_ID) {
+  (function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date();
+    k = e.createElement(t); a = e.getElementsByTagName(t)[0]; k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
+  })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  ym(APP_CONFIG.METRIKA_ID, "init", { clickmap: true, trackLinks: true, accurateTrackBounce: true, trackHash: true });
+  if (!LS.get("perfume-cookie-ok", false)) $("cookie").hidden = false;
+  $("cookieOk").onclick = () => { LS.set("perfume-cookie-ok", true); $("cookie").hidden = true; };
+}
+// цели: «открыл аромат», «в корзину», «заказ»
 function track(goal, params) { try { if (window.ym && APP_CONFIG.METRIKA_ID) ym(APP_CONFIG.METRIKA_ID, "reachGoal", goal, params); } catch (e) {} }
 
 let tt; function toast(t) { $("toast").textContent = t; $("toast").hidden = false; clearTimeout(tt); tt = setTimeout(() => $("toast").hidden = true, 2600); }

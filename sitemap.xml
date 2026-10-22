@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- после публикации замени https://ТВОЙ-АДРЕС на адрес сайта -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://ТВОЙ-АДРЕС/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://ТВОЙ-АДРЕС/privacy.html</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+</urlset>

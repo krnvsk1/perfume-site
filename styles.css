@@ -318,3 +318,7 @@ textarea{resize:vertical}
 }
 .adm .item input{padding:7px 10px}
 @media (max-width:560px){.adm .item{gap:8px}.adm .item .btn.small{padding:6px 10px}}
+.cookie{position:fixed;left:16px;right:16px;bottom:16px;z-index:28;max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13.5px;box-shadow:0 10px 30px rgba(20,10,30,.15)}
+.cookie a{color:var(--accent);font-weight:600}
+.cookie .btn{flex:0 0 auto}
