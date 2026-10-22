@@ -180,3 +180,16 @@ a.btn{text-decoration:none;display:inline-block}
 .done h3{font:400 28px var(--display);margin:0}
 @media (max-width:560px){.toolbar .sort{flex:1}.toolbar .sort select{width:100%}.cart-btn{flex:1;justify-content:center}}
 @media (prefers-reduced-motion:reduce){.drawer,.drawer-veil{transition:none}.bump{animation:none}}
+
+/* согласие и политика */
+.check{flex-direction:row;align-items:flex-start;gap:10px;font-weight:500;color:var(--fg);cursor:pointer;line-height:1.4}
+.check input{width:20px;height:20px;flex:0 0 20px;margin:1px 0 0;accent-color:var(--accent);padding:0}
+.check a,.site-foot a{color:var(--accent);font-weight:600}
+.site-foot{justify-content:space-between;border-top:1px solid var(--line);padding-top:18px}
+.doc{max-width:760px}
+.doc h1{margin:18px 0 6px}
+.doc h2{font:400 24px var(--display);margin:32px 0 8px}
+.doc p,.doc li{max-width:68ch}
+.doc ul{padding-left:20px}
+.back{color:var(--accent);font-weight:600;text-decoration:none}
+mark.todo{background:color-mix(in srgb,var(--gold) 25%,transparent);color:var(--fg);border-radius:4px;padding:0 4px}

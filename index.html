@@ -56,6 +56,10 @@
     </div>
   </section>
 
+  <footer class="site-foot">
+    <span id="copy"></span>
+    <a href="privacy.html">Политика конфиденциальности</a>
+  </footer>
   <footer id="demoFooter" hidden>
     <span>Демо: заказы, корзина и вход хранятся только в этом браузере.</span>
     <button class="btn ghost small" id="reset" type="button">Сбросить демо</button>
@@ -104,7 +108,9 @@
     <section id="v-auth" class="d-body" hidden>
       <p class="notes" id="authWhy">Войди по номеру телефона, чтобы оформить заказ и видеть историю заказов.</p>
       <form id="phoneForm" class="stack" novalidate>
-        <label>Номер телефона<input id="a-phone" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00" inputmode="tel"></label>
+        <label>Номер телефона<input id="a-phone" type="tel" autocomplete="tel" placeholder="+7 (900) 000-00-00" inputmode="tel"></label>
+        <label class="check"><input type="checkbox" id="a-agree">
+          <span>Согласен на <a href="privacy.html#consent" target="_blank" rel="noopener">обработку персональных данных</a> и принимаю <a href="privacy.html" target="_blank" rel="noopener">политику конфиденциальности</a></span></label>
         <button class="btn" type="submit" id="a-send">Получить код</button>
       </form>
       <form id="codeForm" class="stack" novalidate hidden>
@@ -156,6 +162,7 @@ $("places").innerHTML = Object.entries(LOCS).map(([k, l]) => `
     <div><h3>${esc(l.title)}</h3><p>${esc(l.address)}</p><p class="notes">${esc(l.hours)}</p>
     ${l.map ? `<a href="${esc(l.map)}" target="_blank" rel="noopener">Открыть на карте</a>` : ""}</div></article>`).join("");
 $("phone").textContent = SHOP.phone || "";
+$("copy").textContent = `© ${new Date().getFullYear()} ${SHOP.name || ""}`;
 const LINK_NAMES = { whatsapp: "WhatsApp", telegram: "Telegram", max: "MAX", vk: "ВКонтакте" };
 $("links").innerHTML = Object.entries(SHOP.links || {}).map(([k, u]) =>
   `<a class="btn ghost small" href="${esc(u)}" target="_blank" rel="noopener">${LINK_NAMES[k] || k}</a>`).join("");
@@ -328,6 +335,7 @@ $("phoneForm").addEventListener("submit", async e => {
   e.preventDefault(); $("a-err").textContent = "";
   const ph = Store.normPhone($("a-phone").value);
   if (!ph) { $("a-err").textContent = "Проверь номер: нужно 11 цифр, например +7 961 000-00-00."; return; }
+  if (!$("a-agree").checked) { $("a-err").textContent = "Отметь согласие на обработку данных: без него мы не можем принять заказ."; $("a-agree").focus(); return; }
   $("a-send").disabled = true;
   const err = await Store.sendCode(ph);
   $("a-send").disabled = false;

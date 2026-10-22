@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Политика конфиденциальности</title>
+<meta name="description" content="Как мы обрабатываем имя и номер телефона покупателей.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap doc">
+  <a class="back" href="index.html">← К ароматам</a>
+  <h1>Политика конфиденциальности</h1>
+  <p class="notes">Действует с <span data-f="date"></span></p>
+
+  <section id="policy">
+    <h2>1. Кто обрабатывает данные</h2>
+    <p>Оператор персональных данных: <span data-f="operator"></span>, ИНН <span data-f="inn"></span><span data-opt="ogrnip">, ОГРНИП <span data-f="ogrnip"></span></span>.
+      Адрес для писем: <span data-f="address"></span>. Почта для запросов: <span data-f="email"></span>. Телефон: <span data-f="phone"></span>.</p>
+    <p>Оператор продаёт парфюмерию на распив и целыми флаконами под названием «<span data-f="shop"></span>» через этот сайт.</p>
+
+    <h2>2. Какие данные мы получаем</h2>
+    <ul>
+      <li>Номер телефона: для входа по коду из SMS и для связи по заказу.</li>
+      <li>Имя: чтобы обращаться к вам при звонке и выдаче заказа.</li>
+      <li>Состав заказа, сумма, пункт выдачи и дата: чтобы собрать и выдать заказ и показать вам историю заказов.</li>
+      <li data-opt="metrika">Обезличенные данные о посещении сайта (cookie, тип устройства, просмотренные страницы) через сервис Яндекс Метрика: чтобы понимать, чем пользуются покупатели, и улучшать сайт.</li>
+    </ul>
+    <p>Корзина и избранное хранятся только в вашем браузере и нам не передаются.</p>
+
+    <h2>3. Зачем</h2>
+    <p>Данные нужны только для оформления, сборки и выдачи заказов, связи с вами по заказу и ведения истории заказов в личном кабинете. Рекламные рассылки мы не отправляем и данные третьим лицам не продаём.</p>
+
+    <h2>4. Что мы с ними делаем и где храним</h2>
+    <p>Мы собираем, записываем, храним, уточняем, используем и удаляем данные. Заказы хранятся в защищённой базе данных, доступ к ним есть только у оператора. Уведомление о новом заказе (имя, телефон, состав) приходит оператору в Telegram. Код для входа отправляется через SMS-сервис.</p>
+
+    <h2>5. Сколько храним</h2>
+    <p>Пока у вас есть аккаунт на сайте, и не дольше 3 лет после последнего заказа. Затем данные удаляются или обезличиваются.</p>
+
+    <h2>6. Ваши права</h2>
+    <p>Вы можете узнать, какие ваши данные у нас есть, попросить исправить или удалить их и отозвать согласие. Напишите на <span data-f="email"></span> или позвоните <span data-f="phone"></span>. Мы ответим в течение 10 рабочих дней. После отзыва согласия мы удалим данные, но оформлять новые заказы через сайт будет нельзя.</p>
+  </section>
+
+  <section id="consent">
+    <h2>Согласие на обработку персональных данных</h2>
+    <p>Отмечая галочку при входе на сайт, я свободно, своей волей и в своём интересе даю согласие <span data-f="operator"></span> (ИНН <span data-f="inn"></span>) на обработку моих персональных данных: номера телефона, имени, сведений о заказах.</p>
+    <p>Цель: оформление, сборка и выдача заказов, связь со мной по заказу, ведение истории заказов.</p>
+    <p>Действия: сбор, запись, систематизация, хранение, уточнение, использование, передача SMS-сервису для отправки кода входа, удаление и уничтожение, с использованием средств автоматизации и без них.</p>
+    <p>Согласие действует до достижения цели обработки или до его отзыва. Я могу отозвать согласие, написав на <span data-f="email"></span>.</p>
+  </section>
+</div>
+<script src="config.js"></script>
+<script>
+(function () {
+  const S = (window.APP_CONFIG || {}).SHOP || {}, L = S.legal || {};
+  const need = t => `<mark class="todo">${t}</mark>`;
+  const val = { operator: L.operator, inn: L.inn, ogrnip: L.ogrnip, address: L.address, email: L.email, phone: S.phone, shop: S.name,
+    date: L.since };
+  const hint = { operator: "ФИО ИП или самозанятого — впиши в config.js", inn: "ИНН", address: "адрес", email: "почта", date: "дата" };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  document.querySelectorAll("[data-f]").forEach(el => {
+    const k = el.dataset.f; el.innerHTML = val[k] ? esc(val[k]) : need(hint[k] || k);
+  });
+  if (!L.ogrnip) document.querySelectorAll('[data-opt="ogrnip"]').forEach(el => el.remove());
+  if (!(window.APP_CONFIG || {}).METRIKA_ID) document.querySelectorAll('[data-opt="metrika"]').forEach(el => el.remove());
+  if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+})();
+</script>
+</body>
+</html>
