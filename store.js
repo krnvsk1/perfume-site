@@ -2,7 +2,7 @@
 (function () {
   const cfg = window.APP_CONFIG || {};
   const live = !!(cfg.SUPABASE_URL && cfg.SUPABASE_KEY && window.supabase);
-  const KEY = "perfume-site-demo-v2";
+  const KEY = "perfume-site-demo-v3";
   const seed = () => JSON.parse(JSON.stringify(window.CATALOG || []));
 
   // ---------- демо ----------

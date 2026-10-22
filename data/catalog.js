@@ -12,7 +12,7 @@ window.CATALOG = [
 "bottle_volume": null,
 "ml_left": null,
 "color": "hsl(198 38% 52%)",
-"photo_url": null
+"photo_url": "images/27-87-mosaique.webp"
 },
 {
 "id": "a25747eda1",

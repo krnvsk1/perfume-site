@@ -24,7 +24,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;margin-top:28px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .stage{height:200px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 85%,var(--glass),transparent 60%);border-radius:10px;overflow:hidden}
-.stage img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.stage img{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain}
+.stage.has-photo{background:#FFFFFF}
 .bottle{position:relative;width:78px;height:130px}
 .cap{position:absolute;left:50%;top:0;width:30px;height:26px;transform:translateX(-50%);background:var(--gold);border-radius:4px 4px 2px 2px}
 .neck{position:absolute;left:50%;top:24px;width:16px;height:10px;transform:translateX(-50%);background:var(--line)}
@@ -87,7 +88,7 @@ footer{margin-top:40px;color:var(--muted);font-size:13px;display:flex;gap:12px;a
 select{font:600 14px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 10px}
 .count{color:var(--muted);font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:16px 0 0}
 .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin-top:14px}
-.stage{position:relative;height:160px}
+.stage{position:relative;height:190px}
 .tag{position:absolute;top:10px;left:10px;font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:var(--accent-fg);border-radius:6px;padding:3px 8px}
 .locs{display:flex;flex-wrap:wrap;gap:6px;min-height:0}
 .loc{font-size:12px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:2px 9px}

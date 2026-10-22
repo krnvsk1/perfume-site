@@ -131,7 +131,7 @@ function card(p) {
   const out = p.ml_left != null && p.ml_left < (p.min_ml || 1);
   const min = p.min_ml || 2;
   return `<article class="card">
-    <div class="stage">${bottle(p)}${isNew(p) ? `<span class="tag">Новинка</span>` : ""}</div>
+    <div class="stage${p.photo_url ? " has-photo" : ""}">${bottle(p)}${isNew(p) ? `<span class="tag">Новинка</span>` : ""}</div>
     <div><div class="house">${esc(p.house)}</div><h3 class="name">${esc(p.name)}</h3></div>
     ${p.description && !isNew(p) ? `<p class="notes">${esc(p.description)}</p>` : `<p class="notes"></p>`}
     ${stock(p)}
