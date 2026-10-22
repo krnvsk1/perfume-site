@@ -686,10 +686,19 @@ $("m-ml").onclick = () => setMode(false); $("m-full").onclick = () => setMode(tr
 $("o-ml").oninput = calc;
 
 let closing = false;
-async function closeProduct() {
+async function closeProduct(quick) {
   if ($("veil").hidden || closing) return;
   closing = true;
   $("veil").classList.remove("in");
+  if (quick === true && !calm.matches) {
+    // окно просто тает, а флакон в это время улетает в корзину
+    await $("orderForm").animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "scale(.96)" }],
+      { duration: 220, easing: "ease-in", fill: "forwards" }).finished;
+    $("orderForm").getAnimations().forEach(a => a.cancel());
+    $("veil").hidden = true; lockScroll(false); closing = false;
+    history.replaceState(null, "", location.pathname + location.search);
+    return;
+  }
   const c = fromCard && fromCard.isConnected ? fromCard : document.querySelector(`[data-open="${CSS.escape(String(cur.id))}"]`);
   const r = c ? c.getBoundingClientRect() : null;
   if (r && r.bottom > 0 && r.top < innerHeight && !calm.matches) {
@@ -710,12 +719,55 @@ $("orderForm").addEventListener("submit", e => {
   const ml = Math.floor(+$("o-ml").value || 0), min = cur.min_ml || 2;
   if (!full && ml < min) return $("o-err").textContent = `Минимальный объём ${min} мл.`;
   if (!full && cur.ml_left != null && ml > cur.ml_left) return $("o-err").textContent = `В наличии только ${cur.ml_left} мл. Уменьши объём.`;
+  const before = $("cartCount").textContent, wasHidden = $("cartCount").hidden, name = title(cur);
   addToCart(cur, ml, full);
-  track("add_to_cart", { perfume: title(cur) });
-  closeProduct();
-  $("cartBtn").classList.remove("bump"); void $("cartBtn").offsetWidth; $("cartBtn").classList.add("bump");
-  toast(`${title(cur)} в корзине`);
+  track("add_to_cart", { perfume: name });
+  if (calm.matches) { closeProduct(); bumpCart(); toast(`${name} в корзине`); return; }
+  // пока флакон летит, счётчик показывает старое число и меняется в момент «приземления»
+  $("cartCount").textContent = before; $("cartCount").hidden = wasHidden;
+  flyToCart($("o-stage")).then(() => { saveCart(); bumpCart(); toast(`${name} в корзине`); });
+  closeProduct(true);
 });
+
+function bumpCart() { $("cartBtn").classList.remove("bump"); void $("cartBtn").offsetWidth; $("cartBtn").classList.add("bump"); }
+
+// Флакон улетает в кнопку корзины по дуге: внешний слой движется по горизонтали равномерно,
+// внутренний — по вертикали сначала вверх, потом вниз, вместе получается парабола.
+function flyToCart(stage) {
+  const src = stage.querySelector(".photo, .bottle"), btn = $("cartBtn");
+  if (!src) return Promise.resolve();
+  const a = src.getBoundingClientRect(), b = btn.getBoundingClientRect();
+  const outer = document.createElement("div"), inner = document.createElement("div");
+  outer.className = "fly"; inner.className = "fly-in";
+  const clone = src.cloneNode(true); clone.removeAttribute("loading");
+  // нарисованный флакон в окне увеличен через transform, переносим этот масштаб на копию
+  const scale0 = src.classList.contains("bottle") ? a.width / src.offsetWidth : 1;
+  const w = a.width / scale0, h = a.height / scale0, cx = a.left + a.width / 2, cy = a.top + a.height / 2;
+  Object.assign(outer.style, { left: cx - w / 2 + "px", top: cy - h / 2 + "px", width: w + "px", height: h + "px" });
+  if (clone.classList.contains("photo")) Object.assign(clone.style, { position: "static", inset: "auto", width: "100%", height: "100%" });
+  inner.append(clone); outer.append(inner); document.body.append(outer);
+  const dx = b.left + b.width / 2 - cx, dy = b.top + b.height / 2 - cy;
+  const end = Math.max(.08, 34 / Math.max(a.width, a.height)) * scale0, dur = 720;
+  // дуга вверх, но не выше края экрана: корзина обычно у самого верха, тогда изгиб даёт разница скоростей —
+  // по горизонтали флакон сначала разгоняется, по вертикали набирает скорость к концу
+  const room = cy + Math.min(0, dy) - h * end / 2 - 12;
+  const lift = Math.max(0, Math.min(140, Math.abs(dx) * .25, room));
+  outer.animate([{ transform: "translateX(0)" }, { transform: `translateX(${dx}px)` }],
+    { duration: dur, easing: "cubic-bezier(.25,.6,.45,1)", fill: "forwards" });
+  // три слоя: внешний летит по горизонтали, средний по вертикали, сам флакон уменьшается и поворачивается
+  inner.animate([
+    { transform: "translateY(0)" },
+    ...(lift > 20 ? [{ transform: `translateY(${Math.min(0, dy) - lift}px)`, offset: .45 }] : []),
+    { transform: `translateY(${dy}px)` }
+  ], { duration: dur, easing: lift > 20 ? "cubic-bezier(.3,0,.7,1)" : "cubic-bezier(.55,0,.75,.45)", fill: "forwards" });
+  clone.style.transformOrigin = "50% 50%";
+  clone.animate([
+    { transform: `scale(${scale0}) rotate(0deg)`, opacity: 1 },
+    { transform: `scale(${Math.max(end * 2.2, scale0 * .4)}) rotate(-6deg)`, opacity: 1, offset: .35 },
+    { transform: `scale(${end}) rotate(10deg)`, opacity: .4 }
+  ], { duration: dur, easing: "ease-out", fill: "forwards" });
+  return new Promise(res => setTimeout(() => { outer.remove(); res(); }, dur));
+}
 
 // ---------- Яндекс Метрика (подключается, только если в config.js указан METRIKA_ID) ----------
 if (APP_CONFIG.METRIKA_ID) {

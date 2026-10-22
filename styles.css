@@ -328,3 +328,9 @@ textarea{resize:vertical}
 .total>span{min-width:0}
 .flask{border-color:color-mix(in srgb,var(--fg) 22%,transparent)}
 .neck{background:color-mix(in srgb,var(--fg) 22%,transparent)}
+/* полёт флакона в корзину */
+.fly{position:fixed;z-index:40;pointer-events:none;will-change:transform}
+.fly-in{width:100%;height:100%;display:grid;place-items:center;transform-origin:50% 50%;will-change:transform,opacity;
+  filter:drop-shadow(0 10px 14px rgba(30,20,40,.25))}
+.fly-in .bottle{transform:none}
+.cart-btn.bump{animation:bump .45s cubic-bezier(.3,1.6,.5,1)}
